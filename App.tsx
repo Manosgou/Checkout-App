@@ -29,7 +29,7 @@ export default class App extends Component <State> {
         title:moment().format("ll"),
         
 
-      }]
+      },...this.state.checkouts]
     })
   }
 
