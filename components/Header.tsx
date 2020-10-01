@@ -24,12 +24,12 @@ export default class Header extends Component{
 const styles = StyleSheet.create({
     header: {
         height: 75,
-        paddingTop: 10,
+        paddingTop: 15,
         backgroundColor: '#036704',
     },
     title: {
         textAlign: 'center',
-        fontSize: 45,
+        fontSize: 40,
         color: 'white',
         letterSpacing: 4,
         marginTop: 8

@@ -8,7 +8,7 @@ import Item from "./components/Item";
 import DebtsModal from "./components/DebtsModal";
 
 interface debts {
-  _id:string;
+  _id: string;
   name: string;
   value: string;
 }
@@ -20,77 +20,100 @@ interface checkouts {
 }
 
 interface IState {
-  selectedItem:checkouts;
+  selectedItem: checkouts;
   showModal: boolean;
   checkouts: checkouts[];
 }
 
 export default class App extends Component<IState> {
   state: IState = {
-    selectedItem:{id:'',title:'',debts:[]},
+    selectedItem: { id: "", title: "", debts: [] },
     showModal: false,
     checkouts: [
-      { id: 'test1', title: "22/5/2020", debts: [{ _id:"1",name: "Dei", value: "50" },{_id:"2", name: "Nero", value: "200" },{_id:'3' ,name: "Trip", value: "70" }] },
-      { id: "test2", title: "24/12/2022", debts: [{ _id:"01", name: "OTE", value: "150" },{ _id:"02", name: "BENZO", value: "2000" }] },
+      {
+        id: "test1",
+        title: "22/5/2020",
+        debts: [
+          { _id: "1", name: "Dei", value: "50" },
+          { _id: "2", name: "Nero", value: "200" },
+          { _id: "3", name: "Drip", value: "70" },
+        ],
+      },
+      {
+        id: "test2",
+        title: "24/12/2022",
+        debts: [
+          { _id: "01", name: "OTE", value: "150" },
+          { _id: "02", name: "BENZO", value: "2000" },
+        ],
+      },
     ],
   };
   newCheckout = () => {
-    // let id = Math.random().toString();
-    // console.log(id);
-    // this.setState({
-    //   checkouts: [
-    //     {
-    //       id: id,
-    //       title: moment().format("ll"),
-    //     },
-    //     ...this.state.checkouts,
-    //   ],
-    // });
-    console.log(this.state.checkouts)
+    let id = Math.random().toString();
+    console.log(id);
+    this.setState({
+      checkouts: [
+        {
+          id: id,
+          title: moment().format("ll"),
+          debts: []
+        },
+        ...this.state.checkouts,
+      ],
+    });
+    console.log(this.state.checkouts);
   };
-
-  onNameChange = (inputValue:string,cId:string,dId:string) => {
+  newDedt = (cId: string) => {
+    let newInput = { _id: Math.random().toString(), name: "", value: "" };
+    let checkouts = [...this.state.checkouts];
+    let index = checkouts.findIndex((el) => el.id === cId);
+    checkouts[index].debts.push(newInput)
+    this.setState({checkouts});
+  };
+  onNameChange = (inputValue: string, cId: string, dId: string) => {
     let checkouts = [...this.state.checkouts];
     let index0 = checkouts.findIndex((el) => el.id === cId);
     let index1 = checkouts[index0].debts.findIndex((el) => el._id === dId);
     checkouts[index0].debts[index1].name = inputValue;
-    this.setState({checkouts})
-      
-     
+    this.setState({ checkouts });
   };
 
-  onValueChange = (inputValue:string,cId:string,dId:string) => {
+  onValueChange = (inputValue: string, cId: string, dId: string) => {
     let checkouts = [...this.state.checkouts];
     let index0 = checkouts.findIndex((el) => el.id === cId);
     let index1 = checkouts[index0].debts.findIndex((el) => el._id === dId);
     checkouts[index0].debts[index1].value = inputValue;
-    this.setState({checkouts})
-      
-     
+    this.setState({ checkouts });
   };
 
-
-  onPresstoggleModal = (item:checkouts) => {
-    this.setState({ showModal: true,selectedItem:item });
+  onPresstoggleModal = (item: checkouts) => {
+    this.setState({ showModal: true, selectedItem: item });
     console.log(item);
   };
-  onPressCloseModal =()=>{
-    this.setState({ showModal: false})
-  }
+  onPressCloseModal = () => {
+    this.setState({ showModal: false });
+  };
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <Header />
-        <DebtsModal item={this.state.selectedItem} onValueChange={this.onValueChange} onNameChange ={this.onNameChange} checkouts={this.state.checkouts} showModal={this.state.showModal} closeModal={() => this.onPressCloseModal()} />
+        <DebtsModal
+          item={this.state.selectedItem}
+          onValueChange={this.onValueChange}
+          onNameChange={this.onNameChange}
+          checkouts={this.state.checkouts}
+          showModal={this.state.showModal}
+          closeModal={() => this.onPressCloseModal()}
+          newDebt={this.newDedt}
+        />
         <FlatList
           data={this.state.checkouts}
           renderItem={({ item }) => (
             <Item
-
               showModal={() => this.onPresstoggleModal(item)}
               id={item.id}
               title={item.title}
-              
             />
           )}
           keyExtractor={(item) => item.id}

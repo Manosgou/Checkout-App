@@ -9,6 +9,7 @@ import {
   TextInput,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 interface debts {
   _id: string;
@@ -26,17 +27,23 @@ interface IProps {
   item: checkouts;
   showModal: boolean;
   closeModal(): void;
-  onNameChange(inputeValue:string,cId:string,dId:string):void;
-  onValueChange(inputeValue:string,cId:string,dId:string):void;
+  onNameChange(inputeValue: string, cId: string, dId: string): void;
+  onValueChange(inputeValue: string, cId: string, dId: string): void;
+  newDebt(cId: string): void;
   checkouts: checkouts[];
 }
 
 export default class DebtsModal extends Component<IProps> {
-
-
   render() {
-    const { closeModal, showModal, item,onNameChange,onValueChange} = this.props;
-    const itemId= item.id;
+    const {
+      closeModal,
+      showModal,
+      item,
+      onNameChange,
+      onValueChange,
+      newDebt,
+    } = this.props;
+    const itemId = item.id;
     return (
       <Modal
         animationType="slide"
@@ -44,44 +51,73 @@ export default class DebtsModal extends Component<IProps> {
         visible={showModal}
         onRequestClose={closeModal}
       >
-        <View style={styles.mainContainer}>
-          <View style={styles.menuContainer}>
-            <View style={styles.header}>
-              <Text style={styles.title}>{item["title"]}</Text>
-              <TouchableOpacity style={styles.trashIcon} onPress={closeModal}>
-                <AntDesign name="arrowleft" size={24} color="white" />
-              </TouchableOpacity>
-            </View>
-            <FlatList
-              data={item.debts}
-              renderItem={({ item }) => (
-                <View
-                  style={{ flexDirection: "row", justifyContent: "center" }}
-                >
-                  <View style={{ margin: 20 }}>
-                    <TextInput
-                      placeholder="Εισάγετε ένα όνομα."
-                      placeholderTextColor="#202020"
-                      maxLength={30}
-                      value={item.name}
-                      onChangeText={(value)=>onNameChange(value,itemId,item._id)}
-                    />
-                  </View>
-                  <View style={{ margin: 20 }}>
-                  <TextInput
-                      placeholder="Εισάγετε μια τιμή."
-                      placeholderTextColor="#202020"
-                      maxLength={30}
-                      value={item.value}
-                      onChangeText={(value)=>onValueChange(value,itemId,item._id)}
-                    />
-                  </View>
-                </View>
-              )}
-              keyExtractor={(item) => item._id}
-            />
-            <Text>Total</Text>
+        <View style={{ flex: 1, backgroundColor: "white" }}>
+          <View
+            style={{
+              backgroundColor: "#036704",
+              borderBottomLeftRadius: 22,
+              borderBottomRightRadius: 22,
+            }}
+          >
+            <Text style={styles.title}>{item.title}</Text>
+            <TouchableOpacity
+              onPress={closeModal}
+              style={{ position: "absolute", top: 21, left: 5 }}
+            >
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </TouchableOpacity>
           </View>
+          <FlatList
+            style={styles.list}
+            data={item.debts}
+            renderItem={({ item }) => (
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View>
+                  <TextInput
+                    placeholder="Εισάγετε ένα όνομα."
+                    placeholderTextColor="#202020"
+                    maxLength={10}
+                    value={item.name}
+                    onChangeText={(value) =>
+                      onNameChange(value, itemId, item._id)
+                    }
+                  />
+                </View>
+                <View>
+                  <TextInput
+                    placeholder="Εισάγετε μια τιμή."
+                    placeholderTextColor="#202020"
+                    maxLength={10}
+                    value={item.value}
+                    onChangeText={(value) =>
+                      onValueChange(value, itemId, item._id)
+                    }
+                  />
+                </View>
+              </View>
+            )}
+            keyExtractor={(item) => item._id}
+          />
+          <TouchableOpacity
+            style={{ alignItems: "center" }}
+            onPress={() => newDebt(itemId)}
+          >
+            <Ionicons name="md-add" size={35} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.total}>
+            Total:
+            {item.debts.reduce(
+              (accum, item) => accum + parseInt(item.value),
+              0
+            )}
+            €
+          </Text>
         </View>
       </Modal>
     );
@@ -89,35 +125,17 @@ export default class DebtsModal extends Component<IProps> {
 }
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "space-evenly",
-  },
-  menuContainer: {
-    justifyContent: "space-evenly",
-    borderRadius: 30,
-    backgroundColor: "white",
-    width: "95%",
-    height: "95%",
-    elevation: 3,
-    flexBasis: "85%",
-  },
-  header: {
-    height: 45,
-    paddingTop: 10,
-    backgroundColor: "#036704",
-  },
   title: {
     textAlign: "center",
-    fontSize: 25,
-    color: "white",
-    letterSpacing: 4,
-    marginTop: 1,
+    fontSize: 30,
+    padding: 15,
   },
-  trashIcon: {
-    position: "absolute",
-    left: 15,
-    top: 17,
+  list: {
+    flex: 1,
+  },
+  total: {
+    textAlign: "center",
+    fontSize: 25,
+    marginBottom: 10,
   },
 });
