@@ -2,19 +2,18 @@ import React,{ Component } from "react";
 import { TouchableOpacity,Text,StyleSheet } from "react-native";
 
 interface Props{
+    id:string;
     title:string;
-    total:number;
-
+    showModal():void
 }
 
 export default class Item extends Component<Props>{
     
     render(){
-        const {title,total}=this.props;
+        const {title,showModal}=this.props;
         return(
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity style={styles.item} onPress={showModal}>
                 <Text style={styles.itemTitle}>{title}</Text>
-                <Text style={styles.itemTotal}>{total}</Text>
             </TouchableOpacity>
         );
     }

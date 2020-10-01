@@ -2,12 +2,12 @@ import React,{ Component } from "react";
 import {StyleSheet,View,TouchableOpacity} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-interface Props{
+interface IProps{
   newCheckout():void;
 }
 
 
-export default class FloatActionButton extends Component<Props>{
+export default class FloatActionButton extends Component<IProps>{
     render(){
       const {newCheckout}=this.props;
         return(
