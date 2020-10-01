@@ -104,12 +104,22 @@ export default class DebtsModal extends Component<IProps> {
             )}
             keyExtractor={(item) => item._id}
           />
-          <TouchableOpacity
-            style={{ alignItems: "center" }}
-            onPress={() => newDebt(itemId)}
+          <View
+            style={{ alignItems:'center',marginBottom:15 }}
           >
-            <Ionicons name="md-add" size={35} color="black" />
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                width: 70,
+                backgroundColor: "#036704", 
+                borderRadius: 22,
+              }}
+              onPress={() => newDebt(itemId)}
+            >
+              <Ionicons name="md-add" size={40} color="white" />
+            </TouchableOpacity>
+          </View>
           <Text style={styles.total}>
             Total:
             {item.debts.reduce(

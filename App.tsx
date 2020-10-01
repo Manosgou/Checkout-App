@@ -114,6 +114,7 @@ export default class App extends Component<IState> {
               showModal={() => this.onPresstoggleModal(item)}
               id={item.id}
               title={item.title}
+              debts={item.debts}
             />
           )}
           keyExtractor={(item) => item.id}
