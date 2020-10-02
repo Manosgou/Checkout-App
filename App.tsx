@@ -31,27 +31,34 @@ export default class App extends Component<IState> {
   state: IState = {
     selectedItem: { id: "", title: "", debts: [] },
     showModal: false,
-    checkouts: [
-      {
-        id: "test1",
-        title: "22/5/2020",
-        debts: [
-          { _id: "1", name: "Dei", value: "50" },
-          { _id: "2", name: "Nero", value: "200" },
-          { _id: "3", name: "Drip", value: "70" },
-        ],
-      },
-      {
-        id: "test2",
-        title: "24/12/2022",
-        debts: [
-          { _id: "01", name: "OTE", value: "150" },
-          { _id: "02", name: "BENZO", value: "2000" },
-        ],
-      },
-    ],
+    checkouts: [],
   };
-  newCheckout = () => {
+
+  getKeys = async (): Promise<string[]> => {
+    let keys: string[] = [];
+    try {
+      keys = await AsyncStorage.getAllKeys();
+    } catch (e) {
+      console.log("error:Keys cannot be retrieved");
+    }
+    return keys;
+  };
+
+  async componentDidMount() {
+    //await AsyncStorage.clear()
+    let keys = await this.getKeys();
+    let item: object;
+    for (let i in keys) {
+      try {
+        item = JSON.parse((await AsyncStorage.getItem(keys[i])) || "{}");
+        this.setState({ checkouts: [...this.state.checkouts, item] });
+      } catch (e) {
+        console.log("error:Tasks cannot be retrieved");
+      }
+    }
+  }
+
+  newCheckout = async () => {
     let id = Math.random().toString();
     console.log(id);
     this.setState({
@@ -64,8 +71,21 @@ export default class App extends Component<IState> {
         ...this.state.checkouts,
       ],
     });
-    console.log(this.state.checkouts);
+    let checkoutObj = {
+      id: id,
+      title: moment().format("ll"),
+      debts: [],
+    };
+    try {
+      await AsyncStorage.setItem(
+        "@" + checkoutObj.id,
+        JSON.stringify(checkoutObj)
+      );
+    } catch (e) {
+      console.log("error:Task cannot be saved");
+    }
   };
+
   newDedt = (cId: string) => {
     let newInput = { _id: Math.random().toString(), name: "", value: "" };
     let checkouts = [...this.state.checkouts];
@@ -74,35 +94,55 @@ export default class App extends Component<IState> {
     this.setState({ checkouts });
   };
 
-  deleteDebt = (cId: string, dId: string) => {
+  deleteDebt = async (cId: string, dId: string) => {
     let checkouts = [...this.state.checkouts];
     let index = checkouts.findIndex((el) => el.id === cId);
     let debt = checkouts[index].debts.findIndex((debt) => debt._id == dId);
     checkouts[index].debts.splice(debt, 1);
     this.setState({ checkouts });
+    try {
+      await AsyncStorage.mergeItem("@" + cId,JSON.stringify(checkouts[index]));
+    } catch (e) {
+      console.log("error:Task cannot be deleted");
+    }
   };
 
-  onNameChange = (inputValue: string, cId: string, dId: string) => {
+  onNameChange = async (inputValue: string, cId: string, dId: string) => {
     let checkouts = [...this.state.checkouts];
     let index0 = checkouts.findIndex((el) => el.id === cId);
     let index1 = checkouts[index0].debts.findIndex((el) => el._id === dId);
     checkouts[index0].debts[index1].name = inputValue;
     this.setState({ checkouts });
+    try {
+      await AsyncStorage.mergeItem("@" + cId,JSON.stringify(checkouts[index0]));
+    } catch (e) {
+      console.log("error:Task cannot be deleted");
+    }
   };
 
-  onValueChange = (inputValue: string, cId: string, dId: string) => {
+  onValueChange = async (inputValue: string, cId: string, dId: string) => {
     let checkouts = [...this.state.checkouts];
     let index0 = checkouts.findIndex((el) => el.id === cId);
     let index1 = checkouts[index0].debts.findIndex((el) => el._id === dId);
     checkouts[index0].debts[index1].value = inputValue;
     this.setState({ checkouts });
+    try {
+      await AsyncStorage.mergeItem("@" + cId,JSON.stringify(checkouts[index0]));
+    } catch (e) {
+      console.log("error:Task cannot be deleted");
+    }
   };
 
-  deleteCheckout = (id: string) => {
+  deleteCheckout = async (id: string) => {
     const checkout = this.state.checkouts.filter(
       (checkout) => checkout.id != id
     );
     this.setState({ checkouts: checkout });
+    try {
+      await AsyncStorage.removeItem("@" + id);
+    } catch (e) {
+      console.log("error:Task cannot be deleted");
+    }
   };
 
   onPresstoggleModal = (item: checkouts) => {
