@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface debts {
   _id: string;
@@ -12,18 +13,27 @@ interface Props {
   title: string;
   debts: debts[];
   showModal(): void;
+  deleteCheckout(id: string): void;
 }
 
 export default class Item extends Component<Props> {
   render() {
-    const { title, showModal, debts } = this.props;
+    const { title, showModal, debts, id, deleteCheckout } = this.props;
     return (
       <TouchableOpacity style={styles.item} onPress={showModal}>
         <Text style={styles.itemTitle}>{title}</Text>
-        <Text style={styles.itemTotal}>
-          Total:{" "}
-          {debts.reduce((accum, item) => accum + parseInt(item.value), 0)}€
-        </Text>
+        <View>
+          <Text style={styles.itemTotal}>
+            Total:{" "}
+            {debts.reduce((accum, item) => accum + parseInt(item.value), 0)}€
+          </Text>
+          <TouchableOpacity
+            style={{ position: "absolute", right: 2 }}
+            onPress={() => deleteCheckout(id)}
+          >
+            <MaterialCommunityIcons name="delete" size={28} color="black" />
+          </TouchableOpacity>
+        </View>
       </TouchableOpacity>
     );
   }
@@ -42,6 +52,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   itemTotal: {
-    fontSize: 18,
+    fontSize: 20,
+    textAlign: "left",
   },
 });

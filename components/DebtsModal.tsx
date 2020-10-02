@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface debts {
   _id: string;
@@ -30,6 +31,7 @@ interface IProps {
   onNameChange(inputeValue: string, cId: string, dId: string): void;
   onValueChange(inputeValue: string, cId: string, dId: string): void;
   newDebt(cId: string): void;
+  deleteDebt(cId: string, dId: string): void;
   checkouts: checkouts[];
 }
 
@@ -42,6 +44,7 @@ export default class DebtsModal extends Component<IProps> {
       onNameChange,
       onValueChange,
       newDebt,
+      deleteDebt
     } = this.props;
     const itemId = item.id;
     return (
@@ -69,11 +72,17 @@ export default class DebtsModal extends Component<IProps> {
           </View>
           <View
             style={{
-              flexDirection: "row",marginBottom:20,marginTop:20
+              flexDirection: "row",
+              marginBottom: 20,
+              marginTop: 20,
             }}
           >
-            <Text style={{flex:1,textAlign:'center',fontSize:22}}>Name</Text>
-            <Text style={{flex:1,textAlign:'center',fontSize:22}}>Value</Text>
+            <Text style={{ flex: 1, textAlign: "center", fontSize: 22 }}>
+              Name
+            </Text>
+            <Text style={{ flex: 1, textAlign: "center", fontSize: 22 }}>
+              Value
+            </Text>
           </View>
           <FlatList
             style={styles.list}
@@ -89,7 +98,7 @@ export default class DebtsModal extends Component<IProps> {
                   <TextInput
                     style={{
                       fontSize: 22,
-                      textAlign: "center",    
+                      textAlign: "center",
                     }}
                     placeholder="Εισάγετε ένα όνομα."
                     placeholderTextColor="#202020"
@@ -114,6 +123,15 @@ export default class DebtsModal extends Component<IProps> {
                       onValueChange(value, itemId, item._id)
                     }
                   />
+                </View>
+                <View style={{ position: "absolute", right: 4, top: 7 }}>
+                  <TouchableOpacity onPress={()=>deleteDebt(itemId,item._id)}>
+                    <MaterialCommunityIcons
+                      name="delete"
+                      size={28}
+                      color="black"
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
             )}
@@ -155,7 +173,7 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-    marginTop:2
+    marginTop: 2,
   },
   total: {
     textAlign: "center",

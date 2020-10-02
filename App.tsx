@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { FlatList, SafeAreaView, Text, View, Modal } from "react-native";
+import { FlatList, SafeAreaView } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
+
 import moment from "moment";
 //components
 import Header from "./components/Header";
@@ -57,7 +59,7 @@ export default class App extends Component<IState> {
         {
           id: id,
           title: moment().format("ll"),
-          debts: []
+          debts: [],
         },
         ...this.state.checkouts,
       ],
@@ -68,9 +70,18 @@ export default class App extends Component<IState> {
     let newInput = { _id: Math.random().toString(), name: "", value: "" };
     let checkouts = [...this.state.checkouts];
     let index = checkouts.findIndex((el) => el.id === cId);
-    checkouts[index].debts.push(newInput)
-    this.setState({checkouts});
+    checkouts[index].debts.push(newInput);
+    this.setState({ checkouts });
   };
+
+  deleteDebt = (cId: string, dId: string) => {
+    let checkouts = [...this.state.checkouts];
+    let index = checkouts.findIndex((el) => el.id === cId);
+    let debt = checkouts[index].debts.findIndex((debt) => debt._id == dId);
+    checkouts[index].debts.splice(debt, 1);
+    this.setState({ checkouts });
+  };
+
   onNameChange = (inputValue: string, cId: string, dId: string) => {
     let checkouts = [...this.state.checkouts];
     let index0 = checkouts.findIndex((el) => el.id === cId);
@@ -85,6 +96,13 @@ export default class App extends Component<IState> {
     let index1 = checkouts[index0].debts.findIndex((el) => el._id === dId);
     checkouts[index0].debts[index1].value = inputValue;
     this.setState({ checkouts });
+  };
+
+  deleteCheckout = (id: string) => {
+    const checkout = this.state.checkouts.filter(
+      (checkout) => checkout.id != id
+    );
+    this.setState({ checkouts: checkout });
   };
 
   onPresstoggleModal = (item: checkouts) => {
@@ -106,6 +124,7 @@ export default class App extends Component<IState> {
           showModal={this.state.showModal}
           closeModal={() => this.onPressCloseModal()}
           newDebt={this.newDedt}
+          deleteDebt={this.deleteDebt}
         />
         <FlatList
           data={this.state.checkouts}
@@ -115,6 +134,7 @@ export default class App extends Component<IState> {
               id={item.id}
               title={item.title}
               debts={item.debts}
+              deleteCheckout={this.deleteCheckout}
             />
           )}
           keyExtractor={(item) => item.id}
