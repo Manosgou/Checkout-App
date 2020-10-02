@@ -67,19 +67,30 @@ export default class DebtsModal extends Component<IProps> {
               <AntDesign name="arrowleft" size={24} color="black" />
             </TouchableOpacity>
           </View>
+          <View
+            style={{
+              flexDirection: "row",marginBottom:20,marginTop:20
+            }}
+          >
+            <Text style={{flex:1,textAlign:'center',fontSize:22}}>Name</Text>
+            <Text style={{flex:1,textAlign:'center',fontSize:22}}>Value</Text>
+          </View>
           <FlatList
             style={styles.list}
             data={item.debts}
             renderItem={({ item }) => (
               <View
                 style={{
-                  flex: 1,
                   flexDirection: "row",
-                  justifyContent: "space-between",
+                  padding: 8,
                 }}
               >
                 <View>
                   <TextInput
+                    style={{
+                      fontSize: 22,
+                      textAlign: "center",    
+                    }}
                     placeholder="Εισάγετε ένα όνομα."
                     placeholderTextColor="#202020"
                     maxLength={10}
@@ -91,6 +102,10 @@ export default class DebtsModal extends Component<IProps> {
                 </View>
                 <View>
                   <TextInput
+                    style={{
+                      fontSize: 22,
+                      textAlign: "center",
+                    }}
                     placeholder="Εισάγετε μια τιμή."
                     placeholderTextColor="#202020"
                     maxLength={10}
@@ -104,15 +119,13 @@ export default class DebtsModal extends Component<IProps> {
             )}
             keyExtractor={(item) => item._id}
           />
-          <View
-            style={{ alignItems:'center',marginBottom:15 }}
-          >
+          <View style={{ alignItems: "center", marginBottom: 15 }}>
             <TouchableOpacity
               style={{
                 alignItems: "center",
                 justifyContent: "center",
                 width: 70,
-                backgroundColor: "#036704", 
+                backgroundColor: "#036704",
                 borderRadius: 22,
               }}
               onPress={() => newDebt(itemId)}
@@ -142,6 +155,7 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
+    marginTop:2
   },
   total: {
     textAlign: "center",
