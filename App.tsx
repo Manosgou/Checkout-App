@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { FlatList, SafeAreaView, View, Text } from "react-native";
+import { AppLoading } from "expo";
+import * as Font from "expo-font";
 import AsyncStorage from "@react-native-community/async-storage";
 import { AntDesign } from "@expo/vector-icons";
 
@@ -24,6 +26,7 @@ interface checkouts {
 }
 
 interface IState {
+  fontsLoaded: boolean;
   selectedItem: checkouts;
   showModal: boolean;
   checkouts: checkouts[];
@@ -31,10 +34,16 @@ interface IState {
 
 export default class App extends Component<IState> {
   state: IState = {
+    fontsLoaded: false,
     selectedItem: { id: "", title: "", debts: [] },
     showModal: false,
     checkouts: [],
   };
+
+  getFonts = () =>
+    Font.loadAsync({
+      "Poppins-Medium": require("./assets/fonts/Poppins-Medium.ttf"),
+    });
 
   getKeys = async (): Promise<string[]> => {
     let keys: string[] = [];
@@ -51,11 +60,13 @@ export default class App extends Component<IState> {
     let keys = await this.getKeys();
     let item: object;
     for (let i in keys) {
-      try {
-        item = JSON.parse((await AsyncStorage.getItem(keys[i])) || "{}");
-        this.setState({ checkouts: [...this.state.checkouts, item] });
-      } catch (e) {
-        console.log("error:Tasks cannot be retrieved");
+      if (keys[i] !== null) {
+        try {
+          item = JSON.parse((await AsyncStorage.getItem(keys[i])) || "{}");
+          this.setState({ checkouts: [...this.state.checkouts, item] });
+        } catch (e) {
+          console.log("error:Tasks cannot be retrieved");
+        }
       }
     }
   }
@@ -161,49 +172,60 @@ export default class App extends Component<IState> {
     this.setState({ showModal: false });
   };
   render() {
-    return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <Header />
-        <DebtsModal
-          item={this.state.selectedItem}
-          onValueChange={this.onValueChange}
-          onNameChange={this.onNameChange}
-          checkouts={this.state.checkouts}
-          showModal={this.state.showModal}
-          closeModal={() => this.onPressCloseModal()}
-          newDebt={this.newDedt}
-          deleteDebt={this.deleteDebt}
-        />
-        {this.state.checkouts.length === 0 ? (
-          <View style={{ flex: 1, justifyContent: "center", opacity: 0.2 }}>
-            <AntDesign
-              style={{ textAlign: "center" }}
-              name="inbox"
-              size={65}
-              color="black"
-            />
-            <Text style={{ textAlign: "center" }}>
-              Η λίστα των ταμείων είναι κενή
-            </Text>
-          </View>
-        ) : (
-          <FlatList
-            data={this.state.checkouts}
-            renderItem={({ item }) => (
-              <Item
-                showModal={() => this.onPresstoggleModal(item)}
-                id={item.id}
-                title={item.title}
-                debts={item.debts}
-                deleteCheckout={this.deleteCheckout}
-              />
-            )}
-            keyExtractor={(item) => item.id}
+    if (this.state.fontsLoaded) {
+      return (
+        <SafeAreaView style={{ flex: 1 }}>
+          <Header />
+          <DebtsModal
+            item={this.state.selectedItem}
+            onValueChange={this.onValueChange}
+            onNameChange={this.onNameChange}
+            checkouts={this.state.checkouts}
+            showModal={this.state.showModal}
+            closeModal={() => this.onPressCloseModal()}
+            newDebt={this.newDedt}
+            deleteDebt={this.deleteDebt}
           />
-        )}
+          {this.state.checkouts.length === 0 ? (
+            <View style={{ flex: 1, justifyContent: "center", opacity: 0.2 }}>
+              <AntDesign
+                style={{ textAlign: "center" }}
+                name="inbox"
+                size={65}
+                color="black"
+              />
+              <Text style={{ textAlign: "center" }}>
+                Η λίστα των ταμείων είναι κενή
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              data={this.state.checkouts}
+              renderItem={({ item }) => (
+                <Item
+                  showModal={() => this.onPresstoggleModal(item)}
+                  id={item.id}
+                  title={item.title}
+                  debts={item.debts}
+                  deleteCheckout={this.deleteCheckout}
+                />
+              )}
+              keyExtractor={(item) => item.id}
+            />
+          )}
 
-        <FloatActionButton newCheckout={() => this.newCheckout()} />
-      </SafeAreaView>
-    );
+          <FloatActionButton newCheckout={() => this.newCheckout()} />
+        </SafeAreaView>
+      );
+    } else {
+      return (
+        <AppLoading
+          startAsync={this.getFonts}
+          onFinish={() => {
+            this.setState({ fontsLoaded: true });
+          }}
+        />
+      );
+    }
   }
 }
