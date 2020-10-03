@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { FlatList, SafeAreaView, View, Text } from "react-native";
-import { AppLoading } from "expo";
+import * as Linking from 'expo-linking'
+import { AppLoading} from "expo";
 import * as Font from "expo-font";
 import AsyncStorage from "@react-native-community/async-storage";
 import { AntDesign } from "@expo/vector-icons";
@@ -240,6 +241,9 @@ export default class App extends Component<IState> {
           )}
 
           <FloatActionButton newCheckout={() => this.newCheckout()} />
+          <Text style={{ fontSize:10,textAlign: "center",opacity:0.2 }}>
+                Created by <Text style={{fontFamily: "Poppins-Medium"}} onPress={() => Linking.openURL('https://manosgou.herokuapp.com/')}> Manos Gouvrikos</Text>
+              </Text>
         </SafeAreaView>
       );
     } else {
