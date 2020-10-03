@@ -24,7 +24,7 @@ export default class Item extends Component<Props> {
         <Text style={styles.itemTitle}>{title}</Text>
         <View>
           <Text style={styles.itemTotal}>
-            Total:{" "}
+            Σύνολο:{" "}
             {debts.reduce((accum, item) => accum + parseInt(item.value), 0)}€
           </Text>
           <TouchableOpacity

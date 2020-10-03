@@ -44,9 +44,14 @@ export default class DebtsModal extends Component<IProps> {
       onNameChange,
       onValueChange,
       newDebt,
-      deleteDebt
+      deleteDebt,
     } = this.props;
+
     const itemId = item.id;
+    const total = item.debts.reduce(
+      (accum, item) => accum + parseInt(item.value),
+      0
+    );
     return (
       <Modal
         animationType="slide"
@@ -78,65 +83,82 @@ export default class DebtsModal extends Component<IProps> {
             }}
           >
             <Text style={{ flex: 1, textAlign: "center", fontSize: 22 }}>
-              Name
+              Όνομα
             </Text>
             <Text style={{ flex: 1, textAlign: "center", fontSize: 22 }}>
-              Value
+              Τιμή
             </Text>
           </View>
-          <FlatList
-            style={styles.list}
-            data={item.debts}
-            renderItem={({ item }) => (
-              <View
-                style={{
-                  flexDirection: "row",
-                  padding: 8,
-                }}
-              >
-                <View>
-                  <TextInput
-                    style={{
-                      fontSize: 22,
-                      textAlign: "center",
-                    }}
-                    placeholder="Εισάγετε ένα όνομα."
-                    placeholderTextColor="#202020"
-                    maxLength={10}
-                    value={item.name}
-                    onChangeText={(value) =>
-                      onNameChange(value, itemId, item._id)
-                    }
-                  />
-                </View>
-                <View>
-                  <TextInput
-                    style={{
-                      fontSize: 22,
-                      textAlign: "center",
-                    }}
-                    placeholder="Εισάγετε μια τιμή."
-                    placeholderTextColor="#202020"
-                    maxLength={10}
-                    value={item.value}
-                    onChangeText={(value) =>
-                      onValueChange(value, itemId, item._id)
-                    }
-                  />
-                </View>
-                <View style={{ position: "absolute", right: 4, top: 7 }}>
-                  <TouchableOpacity onPress={()=>deleteDebt(itemId,item._id)}>
-                    <MaterialCommunityIcons
-                      name="delete"
-                      size={28}
-                      color="black"
+          {item.debts.length === 0 ? (
+            <View style={{ flex: 1, justifyContent: "center", opacity: 0.2 }}>
+              <AntDesign
+                style={{ textAlign: "center" }}
+                name="inbox"
+                size={65}
+                color="black"
+              />
+              <Text style={{ textAlign: "center" }}>Δεν υπάρχουν οφειλές.</Text>
+            </View>
+          ) : (
+            <FlatList
+              style={styles.list}
+              data={item.debts}
+              renderItem={({ item }) => (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    padding: 8,
+                  }}
+                >
+                  <View>
+                    <TextInput
+                      style={{
+                        fontSize: 20,
+                        textAlign: "center",
+                      }}
+                      placeholder="Εισάγετε ένα όνομα."
+                      placeholderTextColor="#202020"
+                      maxLength={10}
+                      value={item.name}
+                      onChangeText={(value) =>
+                        onNameChange(value, itemId, item._id)
+                      }
                     />
-                  </TouchableOpacity>
+                  </View>
+                  <View>
+                    <TextInput
+                      style={{
+                        fontSize: 20,
+                        textAlign: "center",
+                        marginLeft: 15,
+                      }}
+                      keyboardType="numeric"
+                      placeholder="Εισάγετε μια τιμή."
+                      placeholderTextColor="#202020"
+                      maxLength={10}
+                      value={item.value}
+                      onChangeText={(value) =>
+                        onValueChange(value, itemId, item._id)
+                      }
+                    />
+                  </View>
+                  <View style={{ flexDirection: "row" }}>
+                    <TouchableOpacity
+                      onPress={() => deleteDebt(itemId, item._id)}
+                    >
+                      <MaterialCommunityIcons
+                        name="delete"
+                        size={28}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            )}
-            keyExtractor={(item) => item._id}
-          />
+              )}
+              keyExtractor={(item) => item._id}
+            />
+          )}
+
           <View style={{ alignItems: "center", marginBottom: 15 }}>
             <TouchableOpacity
               style={{
@@ -152,12 +174,8 @@ export default class DebtsModal extends Component<IProps> {
             </TouchableOpacity>
           </View>
           <Text style={styles.total}>
-            Total:
-            {item.debts.reduce(
-              (accum, item) => accum + parseInt(item.value),
-              0
-            )}
-            €
+            Σύνολο:
+            {isNaN(total) ? <Text> - </Text> : <Text>{total}</Text>}€
           </Text>
         </View>
       </Modal>

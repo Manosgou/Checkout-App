@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { FlatList, SafeAreaView } from "react-native";
+import { FlatList, SafeAreaView, View, Text } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
+import { AntDesign } from "@expo/vector-icons";
 
 import moment from "moment";
+
 //components
 import Header from "./components/Header";
 import FloatActionButton from "./components/FloatActionButton";
@@ -101,7 +103,7 @@ export default class App extends Component<IState> {
     checkouts[index].debts.splice(debt, 1);
     this.setState({ checkouts });
     try {
-      await AsyncStorage.mergeItem("@" + cId,JSON.stringify(checkouts[index]));
+      await AsyncStorage.mergeItem("@" + cId, JSON.stringify(checkouts[index]));
     } catch (e) {
       console.log("error:Task cannot be deleted");
     }
@@ -114,7 +116,10 @@ export default class App extends Component<IState> {
     checkouts[index0].debts[index1].name = inputValue;
     this.setState({ checkouts });
     try {
-      await AsyncStorage.mergeItem("@" + cId,JSON.stringify(checkouts[index0]));
+      await AsyncStorage.mergeItem(
+        "@" + cId,
+        JSON.stringify(checkouts[index0])
+      );
     } catch (e) {
       console.log("error:Task cannot be deleted");
     }
@@ -127,7 +132,10 @@ export default class App extends Component<IState> {
     checkouts[index0].debts[index1].value = inputValue;
     this.setState({ checkouts });
     try {
-      await AsyncStorage.mergeItem("@" + cId,JSON.stringify(checkouts[index0]));
+      await AsyncStorage.mergeItem(
+        "@" + cId,
+        JSON.stringify(checkouts[index0])
+      );
     } catch (e) {
       console.log("error:Task cannot be deleted");
     }
@@ -166,19 +174,34 @@ export default class App extends Component<IState> {
           newDebt={this.newDedt}
           deleteDebt={this.deleteDebt}
         />
-        <FlatList
-          data={this.state.checkouts}
-          renderItem={({ item }) => (
-            <Item
-              showModal={() => this.onPresstoggleModal(item)}
-              id={item.id}
-              title={item.title}
-              debts={item.debts}
-              deleteCheckout={this.deleteCheckout}
+        {this.state.checkouts.length === 0 ? (
+          <View style={{ flex: 1, justifyContent: "center", opacity: 0.2 }}>
+            <AntDesign
+              style={{ textAlign: "center" }}
+              name="inbox"
+              size={65}
+              color="black"
             />
-          )}
-          keyExtractor={(item) => item.id}
-        />
+            <Text style={{ textAlign: "center" }}>
+              Η λίστα των ταμείων είναι κενή
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={this.state.checkouts}
+            renderItem={({ item }) => (
+              <Item
+                showModal={() => this.onPresstoggleModal(item)}
+                id={item.id}
+                title={item.title}
+                debts={item.debts}
+                deleteCheckout={this.deleteCheckout}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+          />
+        )}
+
         <FloatActionButton newCheckout={() => this.newCheckout()} />
       </SafeAreaView>
     );
