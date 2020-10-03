@@ -49,7 +49,7 @@ export default class DebtsModal extends Component<IProps> {
 
     const itemId = item.id;
     const total = item.debts.reduce(
-      (accum, item) => accum + parseInt(item.value),
+      (accum, item) => accum + parseFloat(item.value),
       0
     );
     return (
@@ -72,7 +72,7 @@ export default class DebtsModal extends Component<IProps> {
               onPress={closeModal}
               style={{ position: "absolute", top: 21, left: 5 }}
             >
-              <AntDesign name="arrowleft" size={24} color="black" />
+              <AntDesign name="arrowleft" size={30} color="black" />
             </TouchableOpacity>
           </View>
           <View
@@ -82,10 +82,10 @@ export default class DebtsModal extends Component<IProps> {
               marginTop: 20,
             }}
           >
-            <Text style={{ flex: 1, textAlign: "center", fontSize: 22 }}>
+            <Text style={{ flex: 1, textAlign: "center", fontSize: 22,fontFamily: "Poppins-Medium" }}>
               Όνομα
             </Text>
-            <Text style={{ flex: 1, textAlign: "center", fontSize: 22 }}>
+            <Text style={{ flex: 1, textAlign: "center", fontSize: 22,fontFamily: "Poppins-Medium" }}>
               Τιμή
             </Text>
           </View>
@@ -186,6 +186,7 @@ export default class DebtsModal extends Component<IProps> {
 const styles = StyleSheet.create({
   title: {
     textAlign: "center",
+    fontFamily: "Poppins-Medium",
     fontSize: 30,
     padding: 15,
   },
@@ -194,6 +195,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   total: {
+    fontFamily: "Poppins-Medium",
     textAlign: "center",
     fontSize: 25,
     marginBottom: 10,

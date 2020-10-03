@@ -19,13 +19,16 @@ interface Props {
 export default class Item extends Component<Props> {
   render() {
     const { title, showModal, debts, id, deleteCheckout } = this.props;
+    const total = debts.reduce(
+      (accum, item) => accum + parseFloat(item.value),
+      0
+    );
     return (
       <TouchableOpacity style={styles.item} onPress={showModal}>
         <Text style={styles.itemTitle}>{title}</Text>
         <View>
           <Text style={styles.itemTotal}>
-            Σύνολο:{" "}
-            {debts.reduce((accum, item) => accum + parseInt(item.value), 0)}€
+            Σύνολο: {isNaN(total) ? <Text> - </Text> : <Text>{total}</Text>}€
           </Text>
           <TouchableOpacity
             style={{ position: "absolute", right: 2 }}
@@ -50,9 +53,11 @@ const styles = StyleSheet.create({
   itemTitle: {
     textAlign: "center",
     fontSize: 25,
+    fontFamily: "Poppins-Medium"
   },
   itemTotal: {
     fontSize: 20,
     textAlign: "left",
+    fontFamily: "Poppins-Medium"
   },
 });

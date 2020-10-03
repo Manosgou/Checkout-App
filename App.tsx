@@ -12,6 +12,7 @@ import Header from "./components/Header";
 import FloatActionButton from "./components/FloatActionButton";
 import Item from "./components/Item";
 import DebtsModal from "./components/DebtsModal";
+import DeleteAllModal from "./components/DeleteAllModal";
 
 interface debts {
   _id: string;
@@ -26,6 +27,7 @@ interface checkouts {
 }
 
 interface IState {
+  deleteAllModal: boolean;
   fontsLoaded: boolean;
   selectedItem: checkouts;
   showModal: boolean;
@@ -34,6 +36,7 @@ interface IState {
 
 export default class App extends Component<IState> {
   state: IState = {
+    deleteAllModal: false,
     fontsLoaded: false,
     selectedItem: { id: "", title: "", debts: [] },
     showModal: false,
@@ -99,54 +102,48 @@ export default class App extends Component<IState> {
     }
   };
 
-  newDedt = (cId: string) => {
+  newDedt = (id: string) => {
     let newInput = { _id: Math.random().toString(), name: "", value: "" };
     let checkouts = [...this.state.checkouts];
-    let index = checkouts.findIndex((el) => el.id === cId);
+    let index = checkouts.findIndex((el) => el.id === id);
     checkouts[index].debts.push(newInput);
     this.setState({ checkouts });
   };
 
-  deleteDebt = async (cId: string, dId: string) => {
+  deleteDebt = async (id: string, _id: string) => {
     let checkouts = [...this.state.checkouts];
-    let index = checkouts.findIndex((el) => el.id === cId);
-    let debt = checkouts[index].debts.findIndex((debt) => debt._id == dId);
+    let index = checkouts.findIndex((el) => el.id === id);
+    let debt = checkouts[index].debts.findIndex((debt) => debt._id == _id);
     checkouts[index].debts.splice(debt, 1);
     this.setState({ checkouts });
     try {
-      await AsyncStorage.mergeItem("@" + cId, JSON.stringify(checkouts[index]));
+      await AsyncStorage.mergeItem("@" + id, JSON.stringify(checkouts[index]));
     } catch (e) {
       console.log("error:Task cannot be deleted");
     }
   };
 
-  onNameChange = async (inputValue: string, cId: string, dId: string) => {
+  onNameChange = async (inputValue: string, id: string, _id: string) => {
     let checkouts = [...this.state.checkouts];
-    let index0 = checkouts.findIndex((el) => el.id === cId);
-    let index1 = checkouts[index0].debts.findIndex((el) => el._id === dId);
-    checkouts[index0].debts[index1].name = inputValue;
+    let index = checkouts.findIndex((el) => el.id === id);
+    let _index = checkouts[index].debts.findIndex((el) => el._id === _id);
+    checkouts[index].debts[_index].name = inputValue;
     this.setState({ checkouts });
     try {
-      await AsyncStorage.mergeItem(
-        "@" + cId,
-        JSON.stringify(checkouts[index0])
-      );
+      await AsyncStorage.mergeItem("@" + id, JSON.stringify(checkouts[index]));
     } catch (e) {
       console.log("error:Task cannot be deleted");
     }
   };
 
-  onValueChange = async (inputValue: string, cId: string, dId: string) => {
+  onValueChange = async (inputValue: string, id: string, _id: string) => {
     let checkouts = [...this.state.checkouts];
-    let index0 = checkouts.findIndex((el) => el.id === cId);
-    let index1 = checkouts[index0].debts.findIndex((el) => el._id === dId);
-    checkouts[index0].debts[index1].value = inputValue;
+    let index = checkouts.findIndex((el) => el.id === id);
+    let _index = checkouts[index].debts.findIndex((el) => el._id === _id);
+    checkouts[index].debts[_index].value = inputValue;
     this.setState({ checkouts });
     try {
-      await AsyncStorage.mergeItem(
-        "@" + cId,
-        JSON.stringify(checkouts[index0])
-      );
+      await AsyncStorage.mergeItem("@" + id, JSON.stringify(checkouts[index]));
     } catch (e) {
       console.log("error:Task cannot be deleted");
     }
@@ -163,7 +160,27 @@ export default class App extends Component<IState> {
       console.log("error:Task cannot be deleted");
     }
   };
+  deleteAll = async () => {
+    if (this.state.checkouts.length === 0) {
+      alert("Δεν υπάρχουν διαθέσια ταμεία");
+      this.onPresstoggleDeleteAllModal();
+    } else {
+      this.setState({ checkouts: [] });
 
+      let keys = await this.getKeys();
+
+      for (let i in keys) {
+        if (keys[i] !== null) {
+          try {
+            await AsyncStorage.removeItem(keys[i]);
+          } catch (e) {
+            console.log("error:Tasks cannot be retrieved");
+          }
+        }
+      }
+      this.onPresstoggleDeleteAllModal();
+    }
+  };
   onPresstoggleModal = (item: checkouts) => {
     this.setState({ showModal: true, selectedItem: item });
     console.log(item);
@@ -171,11 +188,14 @@ export default class App extends Component<IState> {
   onPressCloseModal = () => {
     this.setState({ showModal: false });
   };
+  onPresstoggleDeleteAllModal = () => {
+    this.setState({ deleteAllModal: !this.state.deleteAllModal });
+  };
   render() {
     if (this.state.fontsLoaded) {
       return (
         <SafeAreaView style={{ flex: 1 }}>
-          <Header />
+          <Header showDeleteAllModal={this.onPresstoggleDeleteAllModal} />
           <DebtsModal
             item={this.state.selectedItem}
             onValueChange={this.onValueChange}
@@ -185,6 +205,11 @@ export default class App extends Component<IState> {
             closeModal={() => this.onPressCloseModal()}
             newDebt={this.newDedt}
             deleteDebt={this.deleteDebt}
+          />
+          <DeleteAllModal
+            deleteAll={this.deleteAll}
+            modalVisibility={this.state.deleteAllModal}
+            closeModal={() => this.onPresstoggleDeleteAllModal()}
           />
           {this.state.checkouts.length === 0 ? (
             <View style={{ flex: 1, justifyContent: "center", opacity: 0.2 }}>
