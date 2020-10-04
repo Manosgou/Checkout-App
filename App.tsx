@@ -4,7 +4,6 @@ import {
   SafeAreaView,
   View,
   Text,
-  KeyboardAvoidingView,
 } from "react-native";
 import * as Linking from "expo-linking";
 import { AppLoading } from "expo";
@@ -115,7 +114,7 @@ export default class App extends Component<IState> {
         JSON.stringify(checkoutObj)
       );
     } catch (e) {
-      console.log("error:Task cannot be saved");
+      console.log("error:Checkout cannot be saved");
     }
   };
 
@@ -136,7 +135,7 @@ export default class App extends Component<IState> {
     try {
       await AsyncStorage.mergeItem("@" + id, JSON.stringify(checkouts[index]));
     } catch (e) {
-      console.log("error:Task cannot be deleted");
+      console.log("error:Debt cannot be deleted");
     }
   };
 
@@ -149,7 +148,7 @@ export default class App extends Component<IState> {
     try {
       await AsyncStorage.mergeItem("@" + id, JSON.stringify(checkouts[index]));
     } catch (e) {
-      console.log("error:Task cannot be deleted");
+      console.log("error:Data cannot be merged");
     }
   };
 
@@ -162,7 +161,7 @@ export default class App extends Component<IState> {
     try {
       await AsyncStorage.mergeItem("@" + id, JSON.stringify(checkouts[index]));
     } catch (e) {
-      console.log("error:Task cannot be deleted");
+      console.log("error:Data cannot be deleted");
     }
   };
 
@@ -174,7 +173,7 @@ export default class App extends Component<IState> {
     try {
       await AsyncStorage.removeItem("@" + id);
     } catch (e) {
-      console.log("error:Task cannot be deleted");
+      console.log("error:Data cannot be deleted");
     }
   };
   deleteAll = async () => {
@@ -191,7 +190,7 @@ export default class App extends Component<IState> {
           try {
             await AsyncStorage.removeItem(keys[i]);
           } catch (e) {
-            console.log("error:Tasks cannot be retrieved");
+            console.log("error:Data cannot be retrieved");
           }
         }
       }
