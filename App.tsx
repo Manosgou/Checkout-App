@@ -12,7 +12,9 @@ import * as Font from "expo-font";
 import AsyncStorage from "@react-native-community/async-storage";
 import { AntDesign } from "@expo/vector-icons";
 
+//moment
 import moment from "moment";
+import 'moment/locale/el';
 
 //components
 import Header from "./components/Header";
@@ -82,13 +84,15 @@ export default class App extends Component<IState> {
   }
 
   newCheckout = async () => {
+    moment.locale('el')
+    let date = moment().format('LL')
     let id = Math.random().toString();
     console.log(id);
     this.setState({
       checkouts: [
         {
           id: id,
-          title: moment().format("ll"),
+          title:date ,
           debts: [],
         },
         ...this.state.checkouts,
@@ -96,7 +100,7 @@ export default class App extends Component<IState> {
     });
     let checkoutObj = {
       id: id,
-      title: moment().format("ll"),
+      title: date,
       debts: [],
     };
     try {
