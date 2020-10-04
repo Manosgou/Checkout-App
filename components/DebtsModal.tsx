@@ -30,10 +30,10 @@ interface IProps {
   item: checkouts;
   showModal: boolean;
   closeModal(): void;
-  onNameChange(inputeValue: string, cId: string, dId: string): void;
-  onValueChange(inputeValue: string, cId: string, dId: string): void;
-  newDebt(cId: string): void;
-  deleteDebt(cId: string, dId: string): void;
+  onNameChange:(inputeValue: string, cId: string, dId: string)=> void;
+  onValueChange:(inputeValue: string, cId: string, dId: string)=> void;
+  newDebt:(cId: string)=> void;
+  deleteDebt:(cId: string, dId: string)=> void;
   checkouts: checkouts[];
 }
 

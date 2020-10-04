@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Constant from 'expo-constants'
 
 interface IProps{
-    showDeleteAllModal():void;
+    showDeleteAllModal:() => void;
 }
 
 

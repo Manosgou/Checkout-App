@@ -12,8 +12,8 @@ interface Props {
   id: string;
   title: string;
   debts: debts[];
-  showModal(): void;
-  deleteCheckout(id: string): void;
+  showModal:()=> void;
+  deleteCheckout:(id: string) => void;
 }
 
 export default class Item extends Component<Props> {

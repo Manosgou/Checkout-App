@@ -4,8 +4,8 @@ import { StyleSheet, Text, View, TouchableOpacity, Modal } from "react-native";
 
 interface IProps {
   modalVisibility: boolean;
-  closeModal(): void;
-  deleteAll(): void;
+  closeModal:()=> void;
+  deleteAll:()=> void;
 }
 
 export default class DeleteTasks extends Component<IProps> {
