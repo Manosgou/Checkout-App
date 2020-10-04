@@ -109,6 +109,8 @@ export default class DebtsModal extends Component<IProps> {
             </Text>
           </View>
             <KeyboardAwareFlatList
+            removeClippedSubviews={false}
+            enableAutomaticScroll={true}
               style={styles.list}
               data={item.debts}
               renderItem={({ item }) => (
@@ -128,6 +130,7 @@ export default class DebtsModal extends Component<IProps> {
                       textAlign: "center",
                       color: "#000000",
                     }}
+                    
                     placeholder="'Ονομα"
                     placeholderTextColor="lightgrey"
                     maxLength={10}
@@ -196,7 +199,7 @@ export default class DebtsModal extends Component<IProps> {
 
           <Text style={styles.total}>
             Σύνολο:
-            {isNaN(total) ? <Text> - </Text> : <Text>{total}</Text>}€
+            {isNaN(total) ? <Text> - </Text> : <Text>{total.toFixed(2)}</Text>}€
           </Text>
         </View>
       </Modal>
@@ -214,7 +217,6 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-    marginTop: 2,
   },
   total: {
     fontFamily: "Poppins-Medium",

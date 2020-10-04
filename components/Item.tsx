@@ -28,7 +28,7 @@ export default class Item extends Component<Props> {
         <Text style={styles.itemTitle}>{title}</Text>
         <View>
           <Text style={styles.itemTotal}>
-            Σύνολο: {isNaN(total) ? <Text> - </Text> : <Text>{total}</Text>}€
+            Σύνολο: {isNaN(total) ? <Text> - </Text> : <Text>{total.toFixed(2)}</Text>}€
           </Text>
           <TouchableOpacity
             style={{ position: "absolute", right: 2 }}
