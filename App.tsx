@@ -14,7 +14,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 //moment
 import moment from "moment";
-import 'moment/locale/el';
+import "moment/locale/el";
 
 //components
 import Header from "./components/Header";
@@ -84,15 +84,21 @@ export default class App extends Component<IState> {
   }
 
   newCheckout = async () => {
-    moment.locale('el')
-    let date = moment().format('LL')
+    let checkouts = [...this.state.checkouts];
+    moment.locale("el");
+    let date = moment().format("LL");
     let id = Math.random().toString();
-    console.log(id);
+    for (let i in checkouts) {
+      if (checkouts[i].title === date) {
+        alert("Υπάρχει ήδη ταμείο με ημερομηνία " + date);
+        return;
+      }
+    }
     this.setState({
       checkouts: [
         {
           id: id,
-          title:date ,
+          title: date,
           debts: [],
         },
         ...this.state.checkouts,
