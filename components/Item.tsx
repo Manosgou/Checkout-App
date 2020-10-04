@@ -53,11 +53,13 @@ const styles = StyleSheet.create({
   itemTitle: {
     textAlign: "center",
     fontSize: 25,
-    fontFamily: "Poppins-Medium"
+    fontFamily: "Poppins-Medium",
+    color:'#000000'
   },
   itemTotal: {
     fontSize: 20,
     textAlign: "left",
-    fontFamily: "Poppins-Medium"
+    fontFamily: "Poppins-Medium",
+    color:'#000000'
   },
 });

@@ -37,12 +37,13 @@ export default class DeleteTasks extends Component<IProps> {
                 style={{
                   textAlign: "center",
                   fontWeight: "bold",
+                  color:'#000000',
                   fontSize: 25,
                 }}
               >
                 ΠΡΟΣΟΧΗ!
               </Text>
-              <Text style={{ textAlign: "center", fontWeight: "bold" }}>
+              <Text style={{ textAlign: "center", fontWeight: "bold",color:'#000000' }}>
                 Όλα τα ταμεία σας θα διαγραφούν. Αυτή η ενέργεια είναι μη
                 αναστρέψιμη.
               </Text>
@@ -68,11 +69,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   menuContainer: {
+    justifyContent:'space-between',
     alignItems: "center",
     borderRadius: 30,
     backgroundColor: "#B33A3A",
     width: "90%",
-    height: "40%",
+    height: "45%",
     elevation: 3,
   },
   closeIcon: {
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    padding: 45,
+    padding: 25,
     justifyContent: "space-between",
   },
   buttons: {

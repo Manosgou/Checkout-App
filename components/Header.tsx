@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-
+import Constant from 'expo-constants'
 
 interface IProps{
     showDeleteAllModal():void;
@@ -9,11 +9,14 @@ interface IProps{
 
 
 export default class Header extends Component<IProps>{
+    
     render() {
+        
         const {showDeleteAllModal}=this.props;
         return (
             <View style={styles.header}>
                 <Text style={styles.title}>Check<Text style={{ color: 'black' }}>out</Text></Text>
+                
                 <TouchableOpacity style={styles.trashIcon} onPress={()=>showDeleteAllModal()}>
                     <FontAwesome5 name="trash-alt" size={24} color="black" />
                 </TouchableOpacity>
@@ -26,8 +29,11 @@ export default class Header extends Component<IProps>{
 
 const styles = StyleSheet.create({
     header: {
-        height: 75,
-        paddingTop: 15,
+        // marginTop:Constant.statusBarHeight,
+        height:60,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'center',
         backgroundColor: '#036704',
     },
     title: {
@@ -41,7 +47,7 @@ const styles = StyleSheet.create({
     trashIcon: {
         position: 'absolute',
         right: 15,
-        top: 40
+        top: 18
 
 
     }

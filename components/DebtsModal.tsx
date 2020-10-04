@@ -7,10 +7,12 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
+  KeyboardAvoidingView,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 
 interface debts {
   _id: string;
@@ -52,6 +54,7 @@ export default class DebtsModal extends Component<IProps> {
       (accum, item) => accum + parseFloat(item.value),
       0
     );
+
     return (
       <Modal
         animationType="slide"
@@ -70,7 +73,7 @@ export default class DebtsModal extends Component<IProps> {
             <Text style={styles.title}>{item.title}</Text>
             <TouchableOpacity
               onPress={closeModal}
-              style={{ position: "absolute", top: 21, left: 5 }}
+              style={{ position: "absolute", top: 21, left: 10 }}
             >
               <AntDesign name="arrowleft" size={30} color="black" />
             </TouchableOpacity>
@@ -78,101 +81,119 @@ export default class DebtsModal extends Component<IProps> {
           <View
             style={{
               flexDirection: "row",
-              marginBottom: 20,
               marginTop: 20,
             }}
           >
-            <Text style={{ flex: 1, textAlign: "center", fontSize: 22,fontFamily: "Poppins-Medium" }}>
+            <Text
+              style={{
+                flex: 1,
+                textAlign: "center",
+                fontSize: 22,
+                fontFamily: "Poppins-Medium",
+                color: "#000000",
+              }}
+            >
               Όνομα
             </Text>
-            <Text style={{ flex: 1, textAlign: "center", fontSize: 22,fontFamily: "Poppins-Medium" }}>
+            <Text
+              style={{
+                flex: 1,
+                textAlign: "center",
+                fontSize: 22,
+                fontFamily: "Poppins-Medium",
+                marginRight: 25,
+                color: "#000000",
+              }}
+            >
               Τιμή
             </Text>
           </View>
-          {item.debts.length === 0 ? (
-            <View style={{ flex: 1, justifyContent: "center", opacity: 0.2 }}>
-              <AntDesign
-                style={{ textAlign: "center" }}
-                name="inbox"
-                size={65}
-                color="black"
-              />
-              <Text style={{ textAlign: "center" }}>Δεν υπάρχουν οφειλές.</Text>
-            </View>
-          ) : (
-            <FlatList
+            <KeyboardAwareFlatList
               style={styles.list}
               data={item.debts}
               renderItem={({ item }) => (
                 <View
                   style={{
+                    flex: 1,
                     flexDirection: "row",
-                    padding: 8,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 30,
                   }}
                 >
-                  <View>
-                    <TextInput
-                      style={{
-                        fontSize: 20,
-                        textAlign: "center",
-                      }}
-                      placeholder="Εισάγετε ένα όνομα."
-                      placeholderTextColor="#202020"
-                      maxLength={10}
-                      value={item.name}
-                      onChangeText={(value) =>
-                        onNameChange(value, itemId, item._id)
-                      }
+                  <TextInput
+                    style={{
+                      flex: 1,
+                      fontSize: 20,
+                      textAlign: "center",
+                      color: "#000000",
+                    }}
+                    placeholder="'Ονομα"
+                    placeholderTextColor="lightgrey"
+                    maxLength={10}
+                    value={item.name}
+                    onChangeText={(value) =>
+                      onNameChange(value, itemId, item._id)
+                    }
+                  />
+
+                  <TextInput
+                    style={{
+                      flex: 1,
+                      fontSize: 20,
+                      textAlign: "center",
+
+                      color: "#000000",
+                    }}
+                    keyboardType="numeric"
+                    placeholder="Τιμή"
+                    placeholderTextColor="lightgrey"
+                    maxLength={10}
+                    value={item.value}
+                    onChangeText={(value) =>
+                      onValueChange(value, itemId, item._id)
+                    }
+                  />
+
+                  <TouchableOpacity
+                    onPress={() => deleteDebt(itemId, item._id)}
+                    style={{ padding: 2 }}
+                  >
+                    <MaterialCommunityIcons
+                      name="delete"
+                      size={30}
+                      color="black"
                     />
-                  </View>
-                  <View>
-                    <TextInput
-                      style={{
-                        fontSize: 20,
-                        textAlign: "center",
-                        marginLeft: 15,
-                      }}
-                      keyboardType="numeric"
-                      placeholder="Εισάγετε μια τιμή."
-                      placeholderTextColor="#202020"
-                      maxLength={10}
-                      value={item.value}
-                      onChangeText={(value) =>
-                        onValueChange(value, itemId, item._id)
-                      }
-                    />
-                  </View>
-                  <View style={{ flexDirection: "row" }}>
-                    <TouchableOpacity
-                      onPress={() => deleteDebt(itemId, item._id)}
-                    >
-                      <MaterialCommunityIcons
-                        name="delete"
-                        size={28}
-                        color="black"
-                      />
-                    </TouchableOpacity>
-                  </View>
+                  </TouchableOpacity>
                 </View>
               )}
               keyExtractor={(item) => item._id}
+              ListFooterComponent={
+                <View
+                  style={{
+                    alignItems: "center",
+                    marginTop: 20,
+                    
+                  }}
+                >
+                  <TouchableOpacity
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: 40,
+                      backgroundColor: "#036704",
+                      borderRadius: 5,
+                      
+                    }}
+                    onPress={() => newDebt(itemId)}
+                  >
+                    <Ionicons name="md-add" size={30} color="white" />
+                  </TouchableOpacity>
+                </View>
+              }
             />
-          )}
+          
 
-          <View style={{ alignItems: "center", marginBottom: 15 }}>
-            <TouchableOpacity
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                width: 70,
-                backgroundColor: "#036704",
-                borderRadius: 22,
-              }}
-              onPress={() => newDebt(itemId)}
-            >
-              <Ionicons name="md-add" size={40} color="white" />
-            </TouchableOpacity>
-          </View>
           <Text style={styles.total}>
             Σύνολο:
             {isNaN(total) ? <Text> - </Text> : <Text>{total}</Text>}€
@@ -187,6 +208,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     fontFamily: "Poppins-Medium",
+    color: "#000000",
     fontSize: 30,
     padding: 15,
   },
@@ -196,8 +218,8 @@ const styles = StyleSheet.create({
   },
   total: {
     fontFamily: "Poppins-Medium",
+    color: "#000000",
     textAlign: "center",
     fontSize: 25,
-    marginBottom: 10,
   },
 });
