@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import {
-  FlatList,
-  SafeAreaView,
-  View,
-  Text,
-} from "react-native";
+import { FlatList, SafeAreaView, View, Text } from "react-native";
 import * as Linking from "expo-linking";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
@@ -20,7 +15,7 @@ import Header from "./components/Header";
 import FloatActionButton from "./components/FloatActionButton";
 import Item from "./components/Item";
 import DebtsModal from "./components/DebtsModal";
-import DeleteAllModal from "./components/DeleteAllModal";
+import WarningModal from "./components/WarningModal";
 
 interface debts {
   _id: string;
@@ -199,14 +194,16 @@ export default class App extends Component<IState> {
   };
   onPresstoggleModal = (item: checkouts) => {
     this.setState({ showModal: true, selectedItem: item });
-    console.log(item);
   };
+  
   onPressCloseModal = () => {
     this.setState({ showModal: false });
   };
+  
   onPresstoggleDeleteAllModal = () => {
     this.setState({ deleteAllModal: !this.state.deleteAllModal });
   };
+  
   render() {
     if (this.state.fontsLoaded) {
       return (
@@ -224,8 +221,11 @@ export default class App extends Component<IState> {
             deleteDebt={this.deleteDebt}
           />
 
-          <DeleteAllModal
-            deleteAll={this.deleteAll}
+          <WarningModal
+            text="Όλα τα ταμεία σας θα διαγραφούν. Αυτή η ενέργεια είναι μη
+            αναστρέψιμη."
+            buttonText="Διαγραφή όλων"
+            buttonFuntion={this.deleteAll}
             modalVisibility={this.state.deleteAllModal}
             closeModal={() => this.onPresstoggleDeleteAllModal()}
           />
