@@ -33,8 +33,10 @@ interface IState {
   deleteAllModal: boolean;
   fontsLoaded: boolean;
   selectedItem: checkouts;
+  selectedItemID: string;
   showModal: boolean;
   checkouts: checkouts[];
+  showWarningModal: boolean;
 }
 
 export default class App extends Component<IState> {
@@ -42,8 +44,10 @@ export default class App extends Component<IState> {
     deleteAllModal: false,
     fontsLoaded: false,
     selectedItem: { id: "", title: "", debts: [] },
+    selectedItemID: "",
     showModal: false,
     checkouts: [],
+    showWarningModal: false,
   };
 
   getFonts = () =>
@@ -195,21 +199,39 @@ export default class App extends Component<IState> {
   onPresstoggleModal = (item: checkouts) => {
     this.setState({ showModal: true, selectedItem: item });
   };
-  
+
   onPressCloseModal = () => {
     this.setState({ showModal: false });
   };
-  
+
   onPresstoggleDeleteAllModal = () => {
     this.setState({ deleteAllModal: !this.state.deleteAllModal });
   };
-  
+
+  onPresstoggleWarningModal = (id: string) => {
+    this.setState({
+      showWarningModal: !this.state.showWarningModal,
+      selectedItemID: id,
+    });
+  };
+  onPressCloseWarningModal = () => {
+    this.setState({ showWarningModal: !this.state.showWarningModal });
+  };
   render() {
     if (this.state.fontsLoaded) {
       return (
         <SafeAreaView style={{ flex: 1 }}>
           <Header showDeleteAllModal={this.onPresstoggleDeleteAllModal} />
-
+          <WarningModal
+            text="Το ταμείο θα διαγραφεί"
+            buttonText="Διαγραφή"
+            buttonFuntion={() => {
+              this.deleteCheckout(this.state.selectedItemID);
+              this.onPressCloseWarningModal();
+            }}
+            modalVisibility={this.state.showWarningModal}
+            closeModal={() => this.onPressCloseWarningModal()}
+          />
           <DebtsModal
             item={this.state.selectedItem}
             onValueChange={this.onValueChange}
@@ -250,7 +272,7 @@ export default class App extends Component<IState> {
                   id={item.id}
                   title={item.title}
                   debts={item.debts}
-                  deleteCheckout={this.deleteCheckout}
+                  deleteCheckout={this.onPresstoggleWarningModal}
                 />
               )}
               keyExtractor={(item) => item.id}

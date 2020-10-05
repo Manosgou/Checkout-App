@@ -38,21 +38,18 @@ interface IProps {
 }
 interface IState {
   showWarningModal: boolean;
-  debtName: string;
   debtID: string;
 }
 export default class DebtsModal extends Component<IProps, IState> {
   state: IState = {
     showWarningModal: false,
-    debtName: "",
     debtID: "",
   };
   onPresstoggleWarningModal = () => {
     this.setState({ showWarningModal: !this.state.showWarningModal });
   };
-  deletedebt = (id: string, name: string) => {
+  deletedebt = (id: string) => {
     this.setState({
-      debtName: name,
       debtID: id,
     });
     this.onPresstoggleWarningModal();
@@ -82,7 +79,7 @@ export default class DebtsModal extends Component<IProps, IState> {
         onRequestClose={closeModal}
       >
         <WarningModal
-          text={`Η οφειλή με όνομα ${this.state.debtName} θα διαγραφεί.`}
+          text="Η οφειλή θα διαγραφεί."
           buttonText="Διαγραφή"
           buttonFuntion={() => {
             deleteDebt(itemId, this.state.debtID);
@@ -188,7 +185,7 @@ export default class DebtsModal extends Component<IProps, IState> {
 
                 <TouchableOpacity
                   onPress={() =>
-                    this.deletedebt(item._id, item.name)
+                    this.deletedebt(item._id)
                   }
                   style={{ padding: 2 }}
                 >

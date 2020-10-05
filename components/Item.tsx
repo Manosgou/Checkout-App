@@ -13,7 +13,7 @@ interface Props {
   title: string;
   debts: debts[];
   showModal:()=> void;
-  deleteCheckout:(id: string) => void;
+  deleteCheckout:(id:string) => void;
 }
 
 export default class Item extends Component<Props> {
