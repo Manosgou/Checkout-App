@@ -6,13 +6,14 @@ interface IProps {
   modalVisibility: boolean;
   closeModal:()=> void;
   buttonFuntion:()=> void;
+  title:string;
   text:string;
   buttonText:string;
 }
 
 export default class WarningModal extends Component<IProps> {
   render() {
-    const { closeModal, modalVisibility, buttonFuntion,text,buttonText } = this.props;
+    const { closeModal, modalVisibility, buttonFuntion,title,text,buttonText } = this.props;
     return (
       <Modal
         animationType="slide"
@@ -21,7 +22,7 @@ export default class WarningModal extends Component<IProps> {
         onRequestClose={closeModal}
       >
         <View style={styles.mainContainer}>
-          <View style={styles.menuContainer}>
+          <View style={styles.container}>
             <TouchableOpacity
               style={styles.closeIcon}
               onPress={() => closeModal()}
@@ -43,10 +44,9 @@ export default class WarningModal extends Component<IProps> {
                   fontSize: 25,
                 }}
               >
-                ΠΡΟΣΟΧΗ!
+                {title}
               </Text>
-              <Text style={{ textAlign: "center", fontWeight: "bold",color:'#000000' }}>{text}
-              </Text>
+              <Text style={styles.text}>{text}</Text>
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-evenly",
   },
-  menuContainer: {
+  container: {
     justifyContent:'space-between',
     alignItems: "center",
     borderRadius: 30,
@@ -102,4 +102,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "Poppins-Medium",
   },
+  text:{
+    textAlign: "center",
+    color:'#000000',
+    fontFamily: "Poppins-Medium",   
+  }
 });

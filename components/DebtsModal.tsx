@@ -40,6 +40,7 @@ interface IState {
   showWarningModal: boolean;
   debtID: string;
 }
+
 export default class DebtsModal extends Component<IProps, IState> {
   state: IState = {
     showWarningModal: false,
@@ -54,6 +55,7 @@ export default class DebtsModal extends Component<IProps, IState> {
     });
     this.onPresstoggleWarningModal();
   };
+
   render() {
     const {
       closeModal,
@@ -79,6 +81,7 @@ export default class DebtsModal extends Component<IProps, IState> {
         onRequestClose={closeModal}
       >
         <WarningModal
+          title="ΠΡΟΣΟΧΗ"
           text="Η οφειλή θα διαγραφεί."
           buttonText="Διαγραφή"
           buttonFuntion={() => {
@@ -111,21 +114,20 @@ export default class DebtsModal extends Component<IProps, IState> {
             renderItem={({ item }) => (
               <View
                 style={{
-                  flex:1,
-                  alignItems:'center',
-                  marginTop:25
+                  flex: 1,
+                  alignItems: "center",
+                  marginTop: 25,
                 }}
               >
                 <View
                   style={{
                     padding: 10,
                     borderRadius: 22,
-                    backgroundColor:'#2a593f',
-                    width:'80%'
+                    backgroundColor: "#2a593f",
+                    width: "80%",
                   }}
                 >
-                  <View
-                    style={{flexDirection:'row'}}>
+                  <View style={{ flexDirection: "row" }}>
                     <TextInput
                       style={{
                         flex: 1,
@@ -151,14 +153,14 @@ export default class DebtsModal extends Component<IProps, IState> {
                       }}
                       keyboardType="numeric"
                       placeholder="Τιμή"
-                      placeholderTextColor="#ece4d4"
+                      placeholderTextColor="lightgrey"
                       maxLength={10}
                       value={item.value}
                       onChangeText={(value) =>
                         onValueChange(value, itemId, item._id)
                       }
                     />
-                  
+
                     <TouchableOpacity
                       onPress={() => this.deletedebt(item._id)}
                       style={{ padding: 10 }}
