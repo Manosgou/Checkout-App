@@ -223,7 +223,8 @@ export default class App extends Component<IState> {
         <SafeAreaView style={{ flex: 1 }}>
           <Header showDeleteAllModal={this.onPresstoggleDeleteAllModal} />
           <WarningModal
-            text="Το ταμείο θα διαγραφεί"
+            title="ΠΡΟΣΟΧΗ"
+            text="Το ταμείο θα διαγραφεί."
             buttonText="Διαγραφή"
             buttonFuntion={() => {
               this.deleteCheckout(this.state.selectedItemID);
@@ -244,7 +245,8 @@ export default class App extends Component<IState> {
           />
 
           <WarningModal
-            text="Όλα τα ταμεία σας θα διαγραφούν. Αυτή η ενέργεια είναι μη
+            title="ΠΡΟΣΟΧΗ"
+            text="Όλα τα ταμεία σας θα διαγραφούν.Αυτή η ενέργεια είναι μη
             αναστρέψιμη."
             buttonText="Διαγραφή όλων"
             buttonFuntion={this.deleteAll}
