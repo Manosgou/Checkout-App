@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor: '#036704',
+        backgroundColor: '#2a593f',
     },
     title: {
         textAlign: 'center',

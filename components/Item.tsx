@@ -44,7 +44,7 @@ export default class Item extends Component<Props> {
 
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: "#036704",
+    backgroundColor: "#2a593f",
     borderRadius: 20,
     padding: 15,
     margin: 15,

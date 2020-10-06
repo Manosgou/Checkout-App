@@ -91,7 +91,7 @@ export default class DebtsModal extends Component<IProps, IState> {
         <View style={{ flex: 1, backgroundColor: "white" }}>
           <View
             style={{
-              backgroundColor: "#036704",
+              backgroundColor: "#2a593f",
               borderBottomLeftRadius: 22,
               borderBottomRightRadius: 22,
             }}
@@ -104,97 +104,73 @@ export default class DebtsModal extends Component<IProps, IState> {
               <AntDesign name="arrowleft" size={30} color="black" />
             </TouchableOpacity>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 20,
-            }}
-          >
-            <Text
-              style={{
-                flex: 1,
-                textAlign: "center",
-                fontSize: 22,
-                fontFamily: "Poppins-Medium",
-                color: "#000000",
-              }}
-            >
-              Όνομα
-            </Text>
-            <Text
-              style={{
-                flex: 1,
-                textAlign: "center",
-                fontSize: 22,
-                fontFamily: "Poppins-Medium",
-                marginRight: 25,
-                color: "#000000",
-              }}
-            >
-              Τιμή
-            </Text>
-          </View>
           <KeyboardAwareFlatList
             removeClippedSubviews={false}
-            style={styles.list}
+            style={{ flex: 1 }}
             data={item.debts}
             renderItem={({ item }) => (
               <View
                 style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginTop: 30,
+                  flex:1,
+                  alignItems:'center',
+                  marginTop:25
                 }}
               >
-                <TextInput
+                <View
                   style={{
-                    flex: 1,
-                    fontSize: 20,
-                    textAlign: "center",
-                    color: "#000000",
+                    padding: 10,
+                    borderRadius: 22,
+                    backgroundColor:'#2a593f',
+                    width:'80%'
                   }}
-                  autoFocus={true}
-                  placeholder="'Ονομα"
-                  placeholderTextColor="lightgrey"
-                  maxLength={10}
-                  value={item.name}
-                  onChangeText={(value) =>
-                    onNameChange(value, itemId, item._id)
-                  }
-                />
-
-                <TextInput
-                  style={{
-                    flex: 1,
-                    fontSize: 20,
-                    textAlign: "center",
-
-                    color: "#000000",
-                  }}
-                  keyboardType="numeric"
-                  placeholder="Τιμή"
-                  placeholderTextColor="lightgrey"
-                  maxLength={10}
-                  value={item.value}
-                  onChangeText={(value) =>
-                    onValueChange(value, itemId, item._id)
-                  }
-                />
-
-                <TouchableOpacity
-                  onPress={() =>
-                    this.deletedebt(item._id)
-                  }
-                  style={{ padding: 2 }}
                 >
-                  <MaterialCommunityIcons
-                    name="delete"
-                    size={30}
-                    color="black"
-                  />
-                </TouchableOpacity>
+                  <View
+                    style={{flexDirection:'row'}}>
+                    <TextInput
+                      style={{
+                        flex: 1,
+                        fontSize: 20,
+                        textAlign: "center",
+                        color: "#000000",
+                      }}
+                      placeholder="'Ονομα"
+                      placeholderTextColor="lightgrey"
+                      maxLength={10}
+                      value={item.name}
+                      onChangeText={(value) =>
+                        onNameChange(value, itemId, item._id)
+                      }
+                    />
+
+                    <TextInput
+                      style={{
+                        flex: 1,
+                        fontSize: 20,
+                        textAlign: "center",
+                        color: "#000000",
+                      }}
+                      keyboardType="numeric"
+                      placeholder="Τιμή"
+                      placeholderTextColor="#ece4d4"
+                      maxLength={10}
+                      value={item.value}
+                      onChangeText={(value) =>
+                        onValueChange(value, itemId, item._id)
+                      }
+                    />
+                  
+                    <TouchableOpacity
+                      onPress={() => this.deletedebt(item._id)}
+                      style={{ padding: 10 }}
+                    >
+                      <MaterialCommunityIcons
+                        name="delete"
+                        size={30}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
             )}
             keyExtractor={(item) => item._id}
@@ -202,7 +178,7 @@ export default class DebtsModal extends Component<IProps, IState> {
               <View
                 style={{
                   alignItems: "center",
-                  marginTop: 20,
+                  marginTop: 50,
                 }}
               >
                 <TouchableOpacity
@@ -210,7 +186,7 @@ export default class DebtsModal extends Component<IProps, IState> {
                     alignItems: "center",
                     justifyContent: "center",
                     width: 40,
-                    backgroundColor: "#036704",
+                    backgroundColor: "#2a593f",
                     borderRadius: 5,
                   }}
                   onPress={() => newDebt(itemId)}
@@ -236,11 +212,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Poppins-Medium",
     color: "#000000",
-    fontSize: 30,
+    fontSize: 25,
     padding: 15,
-  },
-  list: {
-    flex: 1,
   },
   total: {
     fontFamily: "Poppins-Medium",

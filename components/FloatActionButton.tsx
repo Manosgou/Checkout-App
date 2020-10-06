@@ -32,7 +32,7 @@ const styles =StyleSheet.create({
         justifyContent: 'center',
         width: 70,
         height: 70,
-        backgroundColor: '#036704',
+        backgroundColor: '#2a593f',
         borderRadius: 50,
         elevation:5
       },
