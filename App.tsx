@@ -16,6 +16,7 @@ import FloatActionButton from "./components/FloatActionButton";
 import Item from "./components/Item";
 import DebtsModal from "./components/DebtsModal";
 import WarningModal from "./components/WarningModal";
+import FloatView from "./components/FloatView";
 
 interface debts {
   _id: string;
@@ -196,6 +197,22 @@ export default class App extends Component<IState> {
       this.onPresstoggleDeleteAllModal();
     }
   };
+
+  total = () => {
+    let checkouts = [...this.state.checkouts];
+    let total;
+    for (let i in checkouts) {
+      total = checkouts[i].debts
+        .reduce((accum, item) => accum + parseFloat(item.value), 0)
+        ;
+    }
+    if (total) {
+      return total.toFixed(2);
+    } else if (!total || isNaN(total)) {
+      return " - ";
+    }
+  };
+
   onPresstoggleModal = (item: checkouts) => {
     this.setState({ showModal: true, selectedItem: item });
   };
@@ -282,6 +299,7 @@ export default class App extends Component<IState> {
           )}
 
           <FloatActionButton newCheckout={() => this.newCheckout()} />
+          <FloatView total={() => this.total()} />
           <Text style={{ fontSize: 10, textAlign: "center", opacity: 0.2 }}>
             Created by{" "}
             <Text
