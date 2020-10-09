@@ -2,6 +2,10 @@ import React,{ Component } from "react";
 import {StyleSheet,View,TouchableOpacity} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
+
+//colours
+import {Colours} from '../Colours';
+
 interface IProps{
   newCheckout():void;
 }
@@ -32,7 +36,7 @@ const styles =StyleSheet.create({
         justifyContent: 'center',
         width: 70,
         height: 70,
-        backgroundColor: '#2a593f',
+        backgroundColor: Colours.primaryColour,
         borderRadius: 50,
         elevation:5
       },

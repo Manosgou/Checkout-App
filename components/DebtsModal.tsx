@@ -14,6 +14,10 @@ import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 
 //components
 import WarningModal from "./WarningModal";
+
+//colours
+import {Colours} from '../Colours';
+
 interface debts {
   _id: string;
   name: string;
@@ -94,7 +98,7 @@ export default class DebtsModal extends Component<IProps, IState> {
         <View style={{ flex: 1, backgroundColor: "white" }}>
           <View
             style={{
-              backgroundColor: "#2a593f",
+              backgroundColor:Colours.primaryColour,
               borderBottomLeftRadius: 22,
               borderBottomRightRadius: 22,
             }}
@@ -123,7 +127,7 @@ export default class DebtsModal extends Component<IProps, IState> {
                   style={{
                     padding: 10,
                     borderRadius: 22,
-                    backgroundColor: "#2a593f",
+                    backgroundColor: Colours.primaryColour,
                     width: "80%",
                   }}
                 >
@@ -133,7 +137,7 @@ export default class DebtsModal extends Component<IProps, IState> {
                         flex: 1,
                         fontSize: 20,
                         textAlign: "center",
-                        color: "#000000",
+                        color: Colours.primaryTextColour,
                       }}
                       placeholder="'Ονομα"
                       placeholderTextColor="lightgrey"
@@ -149,7 +153,7 @@ export default class DebtsModal extends Component<IProps, IState> {
                         flex: 1,
                         fontSize: 20,
                         textAlign: "center",
-                        color: "#000000",
+                        color: Colours.primaryTextColour,
                       }}
                       keyboardType="numeric"
                       placeholder="Τιμή"
@@ -168,7 +172,7 @@ export default class DebtsModal extends Component<IProps, IState> {
                       <MaterialCommunityIcons
                         name="delete"
                         size={30}
-                        color="black"
+                        color={Colours.black}
                       />
                     </TouchableOpacity>
                   </View>
@@ -188,7 +192,7 @@ export default class DebtsModal extends Component<IProps, IState> {
                     alignItems: "center",
                     justifyContent: "center",
                     width: 40,
-                    backgroundColor: "#2a593f",
+                    backgroundColor: Colours.primaryColour,
                     borderRadius: 5,
                   }}
                   onPress={() => newDebt(itemId)}
@@ -213,13 +217,13 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     fontFamily: "Poppins-Medium",
-    color: "#000000",
+    color: Colours.primaryTextColour,
     fontSize: 25,
     padding: 15,
   },
   total: {
     fontFamily: "Poppins-Medium",
-    color: "#000000",
+    color: Colours.secondaryTextColour,
     textAlign: "center",
     fontSize: 25,
   },

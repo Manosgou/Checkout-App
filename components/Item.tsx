@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+//colours
+import {Colours} from '../Colours';
+
 interface debts {
   _id: string;
   name: string;
@@ -44,7 +47,7 @@ export default class Item extends Component<Props> {
 
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: "#2a593f",
+    backgroundColor: Colours.primaryColour,
     borderRadius: 20,
     padding: 15,
     margin: 15,
@@ -54,12 +57,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 25,
     fontFamily: "Poppins-Medium",
-    color:'#000000'
+    color:Colours.primaryTextColour
   },
   itemTotal: {
     fontSize: 20,
     textAlign: "left",
     fontFamily: "Poppins-Medium",
-    color:'#000000'
+    color:Colours.primaryTextColour
   },
 });
