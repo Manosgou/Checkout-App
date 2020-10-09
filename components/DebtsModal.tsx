@@ -112,7 +112,11 @@ export default class DebtsModal extends Component<IProps, IState> {
             </TouchableOpacity>
           </View>
           <KeyboardAwareFlatList
+            extraHeight={100}
+            extraScrollHeight={200}	
             removeClippedSubviews={false}
+            initialNumToRender={5}
+            enableOnAndroid={true}  
             style={{ flex: 1 }}
             data={item.debts}
             renderItem={({ item }) => (

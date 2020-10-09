@@ -200,13 +200,13 @@ export default class App extends Component<IState> {
 
   total = () => {
     let checkouts = [...this.state.checkouts];
-    let total:number=0;
+    let total: number = 0;
     for (let i in checkouts) {
-      total +=checkouts[i].debts.reduce(
+      total += checkouts[i].debts.reduce(
         (accum, item) => accum + parseFloat(item.value),
         0
       );
-      console.log(total)
+      console.log(total);
     }
     if (total) {
       return total.toFixed(2);
@@ -302,7 +302,7 @@ export default class App extends Component<IState> {
 
           <FloatActionButton newCheckout={() => this.newCheckout()} />
           <FloatView total={() => this.total()} />
-          <Text style={{ fontSize: 10, textAlign: "center", opacity: 0.2 }}>
+          <Text style={{ fontSize: 8, textAlign: "center", opacity: 0.2 }}>
             Created by{" "}
             <Text
               style={{ fontFamily: "Poppins-Medium" }}
