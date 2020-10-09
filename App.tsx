@@ -200,11 +200,13 @@ export default class App extends Component<IState> {
 
   total = () => {
     let checkouts = [...this.state.checkouts];
-    let total;
+    let total:number=0;
     for (let i in checkouts) {
-      total = checkouts[i].debts
-        .reduce((accum, item) => accum + parseFloat(item.value), 0)
-        ;
+      total +=checkouts[i].debts.reduce(
+        (accum, item) => accum + parseFloat(item.value),
+        0
+      );
+      console.log(total)
     }
     if (total) {
       return total.toFixed(2);
