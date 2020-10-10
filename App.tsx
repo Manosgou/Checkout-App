@@ -286,6 +286,7 @@ export default class App extends Component<IState> {
             </View>
           ) : (
             <FlatList
+              initialNumToRender={5}
               data={this.state.checkouts}
               renderItem={({ item }) => (
                 <Item
