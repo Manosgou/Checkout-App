@@ -16,7 +16,7 @@ import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 import WarningModal from "./WarningModal";
 
 //colours
-import {Colours} from '../Colours';
+import { Colours } from "../Colours";
 
 interface debts {
   _id: string;
@@ -98,7 +98,7 @@ export default class DebtsModal extends Component<IProps, IState> {
         <View style={{ flex: 1, backgroundColor: "white" }}>
           <View
             style={{
-              backgroundColor:Colours.primaryColour,
+              backgroundColor: Colours.primaryColour,
               borderBottomLeftRadius: 22,
               borderBottomRightRadius: 22,
             }}
@@ -113,10 +113,10 @@ export default class DebtsModal extends Component<IProps, IState> {
           </View>
           <KeyboardAwareFlatList
             extraHeight={100}
-            extraScrollHeight={200}	
+            extraScrollHeight={200}
             removeClippedSubviews={false}
             initialNumToRender={5}
-            enableOnAndroid={true}  
+            enableOnAndroid={true}
             style={{ flex: 1 }}
             data={item.debts}
             renderItem={({ item }) => (
@@ -130,7 +130,7 @@ export default class DebtsModal extends Component<IProps, IState> {
                 <View
                   style={{
                     padding: 10,
-                    borderRadius: 22,
+                    borderRadius: 7,
                     backgroundColor: Colours.primaryColour,
                     width: "80%",
                   }}
@@ -143,9 +143,9 @@ export default class DebtsModal extends Component<IProps, IState> {
                         textAlign: "center",
                         color: Colours.primaryTextColour,
                       }}
-                      placeholder="'Ονομα"
+                      maxLength={15}
+                      placeholder="'Ονομα"     
                       placeholderTextColor="lightgrey"
-                      maxLength={10}
                       value={item.name}
                       onChangeText={(value) =>
                         onNameChange(value, itemId, item._id)
@@ -154,24 +154,25 @@ export default class DebtsModal extends Component<IProps, IState> {
 
                     <TextInput
                       style={{
-                        flex: 1,
                         fontSize: 20,
                         textAlign: "center",
+                        width:90,
                         color: Colours.primaryTextColour,
                       }}
+                      // inlineImageLeft='search_icon'
                       keyboardType="numeric"
                       placeholder="Τιμή"
+                      maxLength={6}
                       placeholderTextColor="lightgrey"
-                      maxLength={10}
                       value={item.value}
                       onChangeText={(value) =>
                         onValueChange(value, itemId, item._id)
-                      }
+                      }                    
                     />
 
                     <TouchableOpacity
                       onPress={() => this.deletedebt(item._id)}
-                      style={{ padding: 10 }}
+                      style={{justifyContent:'center'}}
                     >
                       <MaterialCommunityIcons
                         name="delete"
