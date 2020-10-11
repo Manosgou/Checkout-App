@@ -95,7 +95,7 @@ export default class DebtsModal extends Component<IProps, IState> {
           modalVisibility={this.state.showWarningModal}
           closeModal={() => this.onPresstoggleWarningModal()}
         />
-        <View style={{ flex: 1, backgroundColor: "white" }}>
+        <View style={{ flex: 1, backgroundColor:Colours.white }}>
           <View
             style={{
               backgroundColor: Colours.primaryColour,
@@ -108,7 +108,7 @@ export default class DebtsModal extends Component<IProps, IState> {
               onPress={closeModal}
               style={{ position: "absolute", top: 21, left: 10 }}
             >
-              <AntDesign name="arrowleft" size={30} color="black" />
+              <AntDesign name="arrowleft" size={30} color={Colours.white}/>
             </TouchableOpacity>
           </View>
           <KeyboardAwareFlatList
@@ -159,7 +159,6 @@ export default class DebtsModal extends Component<IProps, IState> {
                         width:90,
                         color: Colours.primaryTextColour,
                       }}
-                      // inlineImageLeft='search_icon'
                       keyboardType="numeric"
                       placeholder="Τιμή"
                       maxLength={6}
@@ -190,6 +189,7 @@ export default class DebtsModal extends Component<IProps, IState> {
                 style={{
                   alignItems: "center",
                   marginTop: 50,
+                  marginBottom:50
                 }}
               >
                 <TouchableOpacity
@@ -197,8 +197,10 @@ export default class DebtsModal extends Component<IProps, IState> {
                     alignItems: "center",
                     justifyContent: "center",
                     width: 40,
+                    height:40,
                     backgroundColor: Colours.primaryColour,
-                    borderRadius: 5,
+                    borderRadius: 20,
+                    
                   }}
                   onPress={() => newDebt(itemId)}
                 >
