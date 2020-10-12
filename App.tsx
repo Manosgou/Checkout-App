@@ -17,6 +17,7 @@ import Item from "./components/Item";
 import DebtsModal from "./components/DebtsModal";
 import WarningModal from "./components/WarningModal";
 import FloatView from "./components/FloatView";
+import { Colours } from "./Colours";
 
 interface debts {
   _id: string;
@@ -239,7 +240,7 @@ export default class App extends Component<IState> {
   render() {
     if (this.state.fontsLoaded) {
       return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1,backgroundColor:Colours.white }}>
           <Header showDeleteAllModal={this.onPresstoggleDeleteAllModal} />
           <WarningModal
             title="ΠΡΟΣΟΧΗ"

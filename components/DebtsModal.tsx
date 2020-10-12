@@ -14,6 +14,7 @@ import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 
 //components
 import WarningModal from "./WarningModal";
+import FloatView from "./FloatView";
 
 //colours
 import { Colours } from "../Colours";
@@ -60,6 +61,20 @@ export default class DebtsModal extends Component<IProps, IState> {
     this.onPresstoggleWarningModal();
   };
 
+
+  total = () => {
+  
+    let total: number = 0;
+    total += this.props.item.debts.reduce(
+      (accum, item) => accum + parseFloat(item.value),
+      0
+    );
+    if (total) {
+      return total.toFixed(2);
+    } else if (!total || isNaN(total)) {
+      return " - ";
+    }
+  };
   render() {
     const {
       closeModal,
@@ -71,11 +86,7 @@ export default class DebtsModal extends Component<IProps, IState> {
       deleteDebt,
     } = this.props;
 
-    const itemId = item.id;
-    const total = item.debts.reduce(
-      (accum, item) => accum + parseFloat(item.value),
-      0
-    );
+    const itemId = item.id; 
 
     return (
       <Modal
@@ -113,7 +124,7 @@ export default class DebtsModal extends Component<IProps, IState> {
           </View>
           <KeyboardAwareFlatList
             extraHeight={100}
-            extraScrollHeight={200}
+            extraScrollHeight={250}
             removeClippedSubviews={false}
             initialNumToRender={5}
             enableOnAndroid={true}
@@ -209,11 +220,7 @@ export default class DebtsModal extends Component<IProps, IState> {
               </View>
             }
           />
-
-          <Text style={styles.total}>
-            Σύνολο:
-            {isNaN(total) ? <Text> - </Text> : <Text>{total.toFixed(2)}</Text>}€
-          </Text>
+          <FloatView total={this.total}/>
         </View>
       </Modal>
     );
