@@ -61,9 +61,7 @@ export default class DebtsModal extends Component<IProps, IState> {
     this.onPresstoggleWarningModal();
   };
 
-
   total = () => {
-  
     let total: number = 0;
     total += this.props.item.debts.reduce(
       (accum, item) => accum + parseFloat(item.value),
@@ -86,7 +84,7 @@ export default class DebtsModal extends Component<IProps, IState> {
       deleteDebt,
     } = this.props;
 
-    const itemId = item.id; 
+    const itemId = item.id;
 
     return (
       <Modal
@@ -106,7 +104,7 @@ export default class DebtsModal extends Component<IProps, IState> {
           modalVisibility={this.state.showWarningModal}
           closeModal={() => this.onPresstoggleWarningModal()}
         />
-        <View style={{ flex: 1, backgroundColor:Colours.white }}>
+        <View style={{ flex: 1, backgroundColor: Colours.white }}>
           <View
             style={{
               backgroundColor: Colours.primaryColour,
@@ -119,7 +117,7 @@ export default class DebtsModal extends Component<IProps, IState> {
               onPress={closeModal}
               style={{ position: "absolute", top: 21, left: 10 }}
             >
-              <AntDesign name="arrowleft" size={30} color={Colours.white}/>
+              <AntDesign name="arrowleft" size={30} color={Colours.white} />
             </TouchableOpacity>
           </View>
           <KeyboardAwareFlatList
@@ -155,19 +153,18 @@ export default class DebtsModal extends Component<IProps, IState> {
                         color: Colours.primaryTextColour,
                       }}
                       maxLength={15}
-                      placeholder="'Ονομα"     
+                      placeholder="'Ονομα"
                       placeholderTextColor="lightgrey"
                       value={item.name}
                       onChangeText={(value) =>
                         onNameChange(value, itemId, item._id)
                       }
                     />
-
                     <TextInput
                       style={{
                         fontSize: 20,
                         textAlign: "center",
-                        width:90,
+                        width: 90,
                         color: Colours.primaryTextColour,
                       }}
                       keyboardType="numeric"
@@ -177,12 +174,12 @@ export default class DebtsModal extends Component<IProps, IState> {
                       value={item.value}
                       onChangeText={(value) =>
                         onValueChange(value, itemId, item._id)
-                      }                    
+                      }
                     />
 
                     <TouchableOpacity
                       onPress={() => this.deletedebt(item._id)}
-                      style={{justifyContent:'center'}}
+                      style={{ justifyContent: "center" }}
                     >
                       <MaterialCommunityIcons
                         name="delete"
@@ -200,7 +197,7 @@ export default class DebtsModal extends Component<IProps, IState> {
                 style={{
                   alignItems: "center",
                   marginTop: 50,
-                  marginBottom:50
+                  marginBottom: 50,
                 }}
               >
                 <TouchableOpacity
@@ -208,10 +205,9 @@ export default class DebtsModal extends Component<IProps, IState> {
                     alignItems: "center",
                     justifyContent: "center",
                     width: 40,
-                    height:40,
+                    height: 40,
                     backgroundColor: Colours.primaryColour,
                     borderRadius: 20,
-                    
                   }}
                   onPress={() => newDebt(itemId)}
                 >
@@ -220,7 +216,7 @@ export default class DebtsModal extends Component<IProps, IState> {
               </View>
             }
           />
-          <FloatView total={this.total}/>
+          <FloatView total={this.total} />
         </View>
       </Modal>
     );
