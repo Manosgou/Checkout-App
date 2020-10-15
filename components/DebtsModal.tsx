@@ -51,9 +51,8 @@ interface IState {
 
 export default class DebtsModal extends Component<IProps, IState> {
   keyboardDidShowListener: any;
-  keyboardDidHideListener:any;
-  _keyboardDidHide:any;
-
+  keyboardDidHideListener: any;
+  _keyboardDidHide: any;
 
   state: IState = {
     showWarningModal: false,
@@ -98,13 +97,13 @@ export default class DebtsModal extends Component<IProps, IState> {
     this.keyboardDidHideListener.remove();
   }
 
-  _keyboardDidShow = (e: { endCoordinates: { height: number } })=> {
+  _keyboardDidShow = (e: { endCoordinates: { height: number } }) => {
     this.setState({
-      keyboardHeight:~~e.endCoordinates.height,
+      keyboardHeight: ~~e.endCoordinates.height,
     });
-    console.log()
+    console.log();
     //console.log(~~e.endCoordinates.height)
-  }
+  };
   render() {
     const {
       closeModal,
@@ -146,7 +145,7 @@ export default class DebtsModal extends Component<IProps, IState> {
           >
             <Text style={styles.title}>{item.title}</Text>
             <TouchableOpacity
-              onPress={()=>closeModal()}
+              onPress={() => closeModal()}
               style={{ position: "absolute", top: 21, left: 10 }}
             >
               <AntDesign name="arrowleft" size={30} color={Colours.white} />
@@ -244,6 +243,21 @@ export default class DebtsModal extends Component<IProps, IState> {
                 >
                   <Ionicons name="md-add" size={30} color="white" />
                 </TouchableOpacity>
+                {item.debts.length === 0 ? (
+                  <View
+                    style={{marginTop:200 , opacity: 0.2 }}
+                  >
+                    <AntDesign
+                      style={{ textAlign: "center" }}
+                      name="inbox"
+                      size={65}
+                      color="black"
+                    />
+                    <Text style={{ textAlign: "center" }}>
+                      Η λίστα των ταμείων είναι κενή
+                    </Text>
+                  </View>
+                ) : null}
               </View>
             }
           />
