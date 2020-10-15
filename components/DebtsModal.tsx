@@ -6,6 +6,8 @@ import {
   Modal,
   TouchableOpacity,
   TextInput,
+  Keyboard,
+  Dimensions,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
@@ -44,12 +46,19 @@ interface IProps {
 interface IState {
   showWarningModal: boolean;
   debtID: string;
+  keyboardHeight: number;
 }
 
 export default class DebtsModal extends Component<IProps, IState> {
+  keyboardDidShowListener: any;
+  keyboardDidHideListener:any;
+  _keyboardDidHide:any;
+
+
   state: IState = {
     showWarningModal: false,
     debtID: "",
+    keyboardHeight: 0,
   };
   onPresstoggleWarningModal = () => {
     this.setState({ showWarningModal: !this.state.showWarningModal });
@@ -73,6 +82,29 @@ export default class DebtsModal extends Component<IProps, IState> {
       return " - ";
     }
   };
+  componentDidMount() {
+    this.keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      this._keyboardDidShow
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      this._keyboardDidHide
+    );
+  }
+
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  _keyboardDidShow = (e: { endCoordinates: { height: number } })=> {
+    this.setState({
+      keyboardHeight:~~e.endCoordinates.height,
+    });
+    console.log()
+    //console.log(~~e.endCoordinates.height)
+  }
   render() {
     const {
       closeModal,
@@ -114,19 +146,18 @@ export default class DebtsModal extends Component<IProps, IState> {
           >
             <Text style={styles.title}>{item.title}</Text>
             <TouchableOpacity
-              onPress={closeModal}
+              onPress={()=>closeModal()}
               style={{ position: "absolute", top: 21, left: 10 }}
             >
               <AntDesign name="arrowleft" size={30} color={Colours.white} />
             </TouchableOpacity>
           </View>
           <KeyboardAwareFlatList
-            extraHeight={100}
-            extraScrollHeight={250}
-            removeClippedSubviews={false}
-            initialNumToRender={5}
-            enableOnAndroid={true}
             style={{ flex: 1 }}
+            enableOnAndroid={true}
+            initialNumToRender={5}
+            removeClippedSubviews={false}
+            extraScrollHeight={this.state.keyboardHeight + 50}
             data={item.debts}
             renderItem={({ item }) => (
               <View
