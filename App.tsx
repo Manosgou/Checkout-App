@@ -119,12 +119,17 @@ export default class App extends Component<IState> {
     }
   };
 
-  newDedt = (id: string) => {
-    let newInput = { _id: Math.random().toString(), name: "", value: "" };
+  newDedt = async(id: string,name:string,value:string) => {
+    let newInput = { _id: Math.random().toString(), name:name, value:value,created:moment().calendar()};
     let checkouts = [...this.state.checkouts];
     let index = checkouts.findIndex((el) => el.id === id);
     checkouts[index].debts.push(newInput);
     this.setState({ checkouts });
+    try {
+      await AsyncStorage.mergeItem("@" + id, JSON.stringify(checkouts[index]));
+    } catch (e) {
+      console.log("error:Debt cannot be deleted");
+    }
   };
 
   deleteDebt = async (id: string, _id: string) => {
@@ -140,29 +145,17 @@ export default class App extends Component<IState> {
     }
   };
 
-  onNameChange = async (inputValue: string, id: string, _id: string) => {
+  onInputsUpdate = async (uName: string,uValue:string, id: string, _id: string) => {
     let checkouts = [...this.state.checkouts];
     let index = checkouts.findIndex((el) => el.id === id);
     let _index = checkouts[index].debts.findIndex((el) => el._id === _id);
-    checkouts[index].debts[_index].name = inputValue;
+    checkouts[index].debts[_index].name =uName;
+    checkouts[index].debts[_index].value =uValue;
     this.setState({ checkouts });
     try {
       await AsyncStorage.mergeItem("@" + id, JSON.stringify(checkouts[index]));
     } catch (e) {
       console.log("error:Data cannot be merged");
-    }
-  };
-
-  onValueChange = async (inputValue: string, id: string, _id: string) => {
-    let checkouts = [...this.state.checkouts];
-    let index = checkouts.findIndex((el) => el.id === id);
-    let _index = checkouts[index].debts.findIndex((el) => el._id === _id);
-    checkouts[index].debts[_index].value = inputValue;
-    this.setState({ checkouts });
-    try {
-      await AsyncStorage.mergeItem("@" + id, JSON.stringify(checkouts[index]));
-    } catch (e) {
-      console.log("error:Data cannot be deleted");
     }
   };
 
@@ -240,7 +233,7 @@ export default class App extends Component<IState> {
   render() {
     if (this.state.fontsLoaded) {
       return (
-        <SafeAreaView style={{ flex: 1,backgroundColor:Colours.white }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: Colours.white }}>
           <Header showDeleteAllModal={this.onPresstoggleDeleteAllModal} />
           <WarningModal
             title="ΠΡΟΣΟΧΗ"
@@ -255,11 +248,10 @@ export default class App extends Component<IState> {
           />
           <DebtsModal
             item={this.state.selectedItem}
-            onValueChange={this.onValueChange}
-            onNameChange={this.onNameChange}
+            onInputsUpdate={this.onInputsUpdate}
             checkouts={this.state.checkouts}
             showModal={this.state.showModal}
-            closeModal={() => this.onPressCloseModal()}
+            closeModal={this.onPressCloseModal}
             newDebt={this.newDedt}
             deleteDebt={this.deleteDebt}
           />
@@ -303,7 +295,7 @@ export default class App extends Component<IState> {
           )}
 
           <FloatActionButton newCheckout={() => this.newCheckout()} />
-          <FloatView total={() => this.total()} />
+          <FloatView total={() => this.total()} colour={Colours.primaryColour} elevation={5} />
           <Text style={{ fontSize: 8, textAlign: "center", opacity: 0.2 }}>
             Created by{" "}
             <Text

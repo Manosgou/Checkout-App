@@ -4,6 +4,7 @@ interface colours {
   secondaryTextColour: string;
   black:string;
   white:string;
+  warningRed:string;
 }
 
 export const Colours: colours = {
@@ -11,5 +12,6 @@ export const Colours: colours = {
   primaryTextColour: "#eee",
   secondaryTextColour: "#000000",
   black:"#000000",
-  white:"#eee"
+  white:"#eee",
+  warningRed:'#B33A3A'
 };

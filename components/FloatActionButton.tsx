@@ -17,7 +17,7 @@ export default class FloatActionButton extends Component<IProps>{
         return(
             <View style={styles.fabContainer}>
             <TouchableOpacity style={styles.fab} onPress={newCheckout}>
-              <AntDesign name="plus" size={24} color="white" />
+              <AntDesign name="plus" size={30} color="white" />
             </TouchableOpacity>
           </View>
         );

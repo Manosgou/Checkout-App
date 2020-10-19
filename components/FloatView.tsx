@@ -6,14 +6,16 @@ import { Colours } from "../Colours";
 
 interface IProps {
   total:()=>void;
+  elevation?:number;
+  colour?:string;
 }
 
 export default class FloatView extends Component<IProps> {
   render() {
-    const { total } = this.props;
+    const { total,elevation,colour } = this.props;
     return (
       <View style={styles.fvContainer}>
-        <View style={styles.fv}>
+        <View style={[styles.fv,{elevation:elevation,backgroundColor:colour}]}>
           <Text style={styles.text}>Σύνολο{"\n"+total()}€</Text>
         </View>
       </View>
@@ -23,18 +25,17 @@ export default class FloatView extends Component<IProps> {
 
 const styles = StyleSheet.create({
   fvContainer: {
-    position: "absolute",
-    bottom: 5,
-    left: 5,
+    flexDirection: 'row', 
+    justifyContent: 'center',
+    padding:5
   },
   fv: {
     alignItems: "center",
     justifyContent: "center",
-    width: 120,
+    width: 150,
     height: 50,
-    backgroundColor: Colours.primaryColour,
     borderRadius: 50,
-    elevation: 5,
+    
   },
   text:{
     textAlign:'center',

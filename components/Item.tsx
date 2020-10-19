@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 //colours
-import {Colours} from '../Colours';
+import { Colours } from "../Colours";
 
 interface debts {
   _id: string;
@@ -15,8 +15,8 @@ interface Props {
   id: string;
   title: string;
   debts: debts[];
-  showModal:()=> void;
-  deleteCheckout:(id:string) => void;
+  showModal: () => void;
+  deleteCheckout: (id: string) => void;
 }
 
 export default class Item extends Component<Props> {
@@ -29,16 +29,44 @@ export default class Item extends Component<Props> {
     return (
       <TouchableOpacity style={styles.item} onPress={showModal}>
         <Text style={styles.itemTitle}>{title}</Text>
-        <View>
-          <Text style={styles.itemTotal}>
-            Σύνολο: {isNaN(total) ? <Text> - </Text> : <Text>{total.toFixed(2)}</Text>}€
-          </Text>
-          <TouchableOpacity
-            style={{ position: "absolute", right: 2 }}
-            onPress={() => deleteCheckout(id)}
-          >
-            <MaterialCommunityIcons name="delete" size={28} color="black" />
-          </TouchableOpacity>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <View style={{ flexDirection: "column" }}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: "Poppins-Medium",
+                color: Colours.primaryTextColour,
+              }}
+            >
+              Σύνολο:{" "}
+              {isNaN(total) ? (
+                <Text> - </Text>
+              ) : (
+                <Text>{total.toFixed(2)}</Text>
+              )}
+              €
+            </Text>
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: "Poppins-Medium",
+                color: Colours.primaryTextColour,
+              }}
+            >
+              Αρ.παραγγελιών: {debts.length}
+            </Text>
+          </View>
+          <View>
+            <TouchableOpacity onPress={() => deleteCheckout(id)}>
+              <MaterialCommunityIcons name="delete" size={30} color="black" />
+            </TouchableOpacity>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -57,12 +85,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 25,
     fontFamily: "Poppins-Medium",
-    color:Colours.primaryTextColour
+    color: Colours.primaryTextColour,
   },
   itemTotal: {
     fontSize: 20,
-    textAlign: "left",
     fontFamily: "Poppins-Medium",
-    color:Colours.primaryTextColour
+    color: Colours.primaryTextColour,
   },
 });

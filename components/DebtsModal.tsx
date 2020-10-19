@@ -6,13 +6,11 @@ import {
   Modal,
   TouchableOpacity,
   TextInput,
-  Keyboard,
-  Dimensions,
+  FlatList,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 
 //components
 import WarningModal from "./WarningModal";
@@ -37,9 +35,13 @@ interface IProps {
   item: checkouts;
   showModal: boolean;
   closeModal(): void;
-  onNameChange: (inputeValue: string, cId: string, dId: string) => void;
-  onValueChange: (inputeValue: string, cId: string, dId: string) => void;
-  newDebt: (cId: string) => void;
+  onInputsUpdate: (
+    uName: string,
+    uValue: string,
+    cId: string,
+    dId: string
+  ) => void;
+  newDebt: (cId: string, name: string, value: string) => void;
   deleteDebt: (cId: string, dId: string) => void;
   checkouts: checkouts[];
 }
@@ -47,17 +49,21 @@ interface IState {
   showWarningModal: boolean;
   debtID: string;
   keyboardHeight: number;
+  name: string;
+  value: string;
+  editMode: boolean;
+  selectedItemID: string;
 }
 
 export default class DebtsModal extends Component<IProps, IState> {
-  keyboardDidShowListener: any;
-  keyboardDidHideListener: any;
-  _keyboardDidHide: any;
-
   state: IState = {
     showWarningModal: false,
     debtID: "",
     keyboardHeight: 0,
+    name: "",
+    value: "",
+    editMode: false,
+    selectedItemID: "",
   };
   onPresstoggleWarningModal = () => {
     this.setState({ showWarningModal: !this.state.showWarningModal });
@@ -81,40 +87,30 @@ export default class DebtsModal extends Component<IProps, IState> {
       return " - ";
     }
   };
-  componentDidMount() {
-    this.keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      this._keyboardDidShow
-    );
-    this.keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      this._keyboardDidHide
-    );
-  }
-
-  componentWillUnmount() {
-    this.keyboardDidShowListener.remove();
-    this.keyboardDidHideListener.remove();
-  }
-
-  _keyboardDidShow = (e: { endCoordinates: { height: number } }) => {
+  handleInputChange = (inputName: string, inputValue: string) => {
+    this.setState((state) => ({
+      ...state,
+      [inputName]: inputValue,
+    }));
+  };
+  editInputs = (name: string, value: string, selectedItemID: string) => {
     this.setState({
-      keyboardHeight: ~~e.endCoordinates.height,
+      selectedItemID: selectedItemID,
+      name: name,
+      value: value,
+      editMode: true,
     });
-    console.log();
-    //console.log(~~e.endCoordinates.height)
   };
   render() {
     const {
       closeModal,
       showModal,
       item,
-      onNameChange,
-      onValueChange,
+      onInputsUpdate,
       newDebt,
       deleteDebt,
     } = this.props;
-
+    const { selectedItemID, name, value, editMode } = this.state;
     const itemId = item.id;
 
     return (
@@ -151,117 +147,203 @@ export default class DebtsModal extends Component<IProps, IState> {
               <AntDesign name="arrowleft" size={30} color={Colours.white} />
             </TouchableOpacity>
           </View>
-          <KeyboardAwareFlatList
-            style={{ flex: 1 }}
-            enableOnAndroid={true}
-            initialNumToRender={5}
-            removeClippedSubviews={false}
-            extraScrollHeight={this.state.keyboardHeight + 50}
-            data={item.debts}
-            renderItem={({ item }) => (
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: "center",
-                  marginTop: 25,
-                }}
-              >
+          {item.debts.length === 0 ? (
+            <View style={{ flex: 1, justifyContent: "center", opacity: 0.2 }}>
+              <AntDesign
+                style={{ textAlign: "center" }}
+                name="inbox"
+                size={65}
+                color="black"
+              />
+              <Text style={{ textAlign: "center" }}>
+                Η λίστα των ταμείων είναι κενή
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              style={{ flex: 1 }}
+              initialNumToRender={5}
+              data={item.debts}
+              renderItem={({ item }) => (
                 <View
                   style={{
-                    padding: 10,
-                    borderRadius: 7,
-                    backgroundColor: Colours.primaryColour,
-                    width: "80%",
+                    flex: 1,
+                    alignItems: "center",
+                    marginTop: 25,
+                    marginBottom: 10,
                   }}
                 >
                   <View style={{ flexDirection: "row" }}>
-                    <TextInput
+                    <View style={styles.divider} />
+                    <Text style={styles.created}>{item.created}</Text>
+                    <View style={styles.divider} />
+                  </View>
+                  <View
+                    style={{
+                      padding: 10,
+                      borderRadius: 7,
+                      backgroundColor:item.value[0]==='-'?Colours.warningRed:Colours.primaryColour,
+                      width: "85%",
+                    }}
+                  >
+                    <View
                       style={{
-                        flex: 1,
-                        fontSize: 20,
-                        textAlign: "center",
-                        color: Colours.primaryTextColour,
+                        flexDirection: "row",
+                        justifyContent: "space-around",
+                        alignItems: "center",
                       }}
-                      maxLength={15}
-                      placeholder="'Ονομα"
-                      placeholderTextColor="lightgrey"
-                      value={item.name}
-                      onChangeText={(value) =>
-                        onNameChange(value, itemId, item._id)
-                      }
-                    />
-                    <TextInput
-                      style={{
-                        fontSize: 20,
-                        textAlign: "center",
-                        width: 90,
-                        color: Colours.primaryTextColour,
-                      }}
-                      keyboardType="numeric"
-                      placeholder="Τιμή"
-                      maxLength={6}
-                      placeholderTextColor="lightgrey"
-                      value={item.value}
-                      onChangeText={(value) =>
-                        onValueChange(value, itemId, item._id)
-                      }
-                    />
-
-                    <TouchableOpacity
-                      onPress={() => this.deletedebt(item._id)}
-                      style={{ justifyContent: "center" }}
                     >
-                      <MaterialCommunityIcons
-                        name="delete"
-                        size={30}
-                        color={Colours.black}
-                      />
-                    </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          textAlign: "center",
+                          color: Colours.primaryTextColour,
+                        }}
+                      >
+                        {item.name}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          textAlign: "center",
+                          color: Colours.primaryTextColour,
+                        }}
+                      >
+                        {item.value}
+                      </Text>
+
+                      <TouchableOpacity
+                        onPress={() =>
+                          this.editInputs(item.name, item.value, item._id)
+                        }
+                        style={{ justifyContent: "center" }}
+                      >
+                        <MaterialCommunityIcons
+                          name="circle-edit-outline"
+                          size={30}
+                          color="black"
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => this.deletedebt(item._id)}
+                        style={{ justifyContent: "center" }}
+                      >
+                        <MaterialCommunityIcons
+                          name="delete"
+                          size={30}
+                          color={Colours.black}
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            )}
-            keyExtractor={(item) => item._id}
-            ListFooterComponent={
-              <View
+              )}
+              keyExtractor={(item) => item._id}
+            />
+          )}
+          <View
+            style={{
+              backgroundColor:this.state.value[0]==='-'?Colours.warningRed:Colours.primaryColour,
+              borderTopRightRadius: 30,
+              borderTopLeftRadius: 30,
+            }}
+          >
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-around" }}
+            >
+              <TextInput
                 style={{
-                  alignItems: "center",
-                  marginTop: 50,
-                  marginBottom: 50,
+                  fontSize: 20,
+                  textAlign: "center",
+                  color: Colours.primaryTextColour,
+                }}
+                maxLength={15}
+                placeholder="'Ονομα"
+                placeholderTextColor="lightgrey"
+                value={name}
+                onChangeText={(value) => this.handleInputChange("name", value)}
+              />
+              <TextInput
+                style={{
+                  fontSize: 20,
+                  textAlign: "center",
+                  width: 90,
+                  color: Colours.primaryTextColour,
+                }}
+                keyboardType="numeric"
+                placeholder="Τιμή"
+                maxLength={6}
+                placeholderTextColor="lightgrey"
+                value={value}
+                onChangeText={(value) => this.handleInputChange("value", value)}
+              />
+              {!editMode ? (
+                <TouchableOpacity style={{ justifyContent: "center" }}>
+                  <Entypo
+                    name="add-to-list"
+                    size={30}
+                    color={Colours.black}
+                    onPress={() => {
+                      if (name.trim() === "" || value.trim() === "") {
+                        alert("Τα στοιχεία δεν μπορούν να είναι κενά.");
+                      } else {
+                        newDebt(itemId, name, value);
+                        this.setState({
+                          name: "",
+                          value: "",
+                        });
+                      }
+                    }}
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity style={{ justifyContent: "center" }}>
+                  <MaterialCommunityIcons
+                    name="update"
+                    size={30}
+                    color={Colours.black}
+                    onPress={() => {
+                      if (name.trim() === "" || value.trim() === "") {
+                        alert("Τα στοιχεία δεν μπορούν να είναι κενά.");
+                      } else {
+                        onInputsUpdate(name, value, item.id, selectedItemID);
+                        this.setState({
+                          selectedItemID: "",
+                          name: "",
+                          value: "",
+                          editMode: false,
+                        });
+                      }
+                    }}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+            <View
+              style={{
+                borderBottomWidth: 1,
+                opacity: 0.1,
+              }}
+            />
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontFamily: "Poppins-Medium",
+                  color: Colours.primaryTextColour,
                 }}
               >
-                <TouchableOpacity
-                  style={{
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: 40,
-                    height: 40,
-                    backgroundColor: Colours.primaryColour,
-                    borderRadius: 20,
-                  }}
-                  onPress={() => newDebt(itemId)}
-                >
-                  <Ionicons name="md-add" size={30} color="white" />
-                </TouchableOpacity>
-                {item.debts.length === 0 ? (
-                  <View
-                    style={{marginTop:200 , opacity: 0.2 }}
-                  >
-                    <AntDesign
-                      style={{ textAlign: "center" }}
-                      name="inbox"
-                      size={65}
-                      color="black"
-                    />
-                    <Text style={{ textAlign: "center" }}>
-                      Η λίστα των ταμείων είναι κενή
-                    </Text>
-                  </View>
-                ) : null}
-              </View>
-            }
-          />
-          <FloatView total={this.total} />
+                Αρ.παραγγελιών: {item.debts.length}
+              </Text>
+              <FloatView total={this.total} />
+            </View>
+          </View>
         </View>
       </Modal>
     );
@@ -281,5 +363,16 @@ const styles = StyleSheet.create({
     color: Colours.secondaryTextColour,
     textAlign: "center",
     fontSize: 25,
+  },
+  divider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "lightgrey",
+    alignSelf: "center",
+    opacity: 0.2,
+  },
+  created: {
+    fontSize: 15,
+    opacity: 0.3,
   },
 });
